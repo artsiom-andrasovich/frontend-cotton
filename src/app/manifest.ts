@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Cotton",
     short_name: "Cotton",
     description: "Cotton - Your Flashcard Learning App",
-    start_url: "/",
+    start_url: "/auth/sign-in",
     display: "standalone",
     display_override: ["standalone"],
     background_color: "#ffffff",

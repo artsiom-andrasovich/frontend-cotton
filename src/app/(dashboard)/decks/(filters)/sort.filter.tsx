@@ -20,13 +20,7 @@ export function SortFilter({ setSortBy, sortBy }: TSortFilterProps) {
         <span>Sort by:</span>
       </div>
       <div className="flex items-center space-x-2 overflow-x-auto hide-scrollbar pb-2">
-        {[
-          { value: "recent", label: "Recently Studied" },
-          { value: "mastery", label: "Mastery" },
-          { value: "cards", label: "Card Count" },
-          { value: "alphabetical", label: "A-Z" },
-          { value: "newest", label: "Newest" },
-        ].map((option) => (
+        {POSSIBLE_SORT_BY_DECK.map((option) => (
           <button
             key={option.value}
             onClick={() => setSortBy(option.value)}

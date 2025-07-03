@@ -4,6 +4,7 @@ import { useFilters, useQueryFilters } from "@/hooks";
 import { useListCategories } from "@/hooks/use-list-categories.hook";
 import { CategoryFilter, SortFilter } from "./(filters)";
 export function DecksFilter() {
+  //TODO: change type to array
   const { data: categories, isLoading } = useListCategories();
 
   // const categories = [

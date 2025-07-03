@@ -26,7 +26,7 @@ export function DecksList() {
   if (isLoading && decks.length === 0) {
     return (
       <div className="grid gap-4 ">
-        {...Array(2)
+        {...Array(5)
           .fill(0)
           .map((_, i) => (
             <div
