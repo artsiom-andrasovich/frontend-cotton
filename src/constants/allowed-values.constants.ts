@@ -1,0 +1,31 @@
+export const ALLOWED_COLORS = [
+  "red",
+  "emerald",
+  "blue",
+  "cyan",
+  "purple",
+  "pink",
+  "yellow",
+  "stone",
+] as const;
+
+export const ALLOWED_ICONS = [
+  "bookOpen",
+  "bot",
+  "food",
+  "music",
+  "ghost",
+  "movies",
+  "design",
+  "art",
+  "code",
+  "award",
+  "mail",
+  "math",
+  "activity",
+  "video",
+  "nature",
+  "mind",
+  "travel",
+  "car",
+] as const;

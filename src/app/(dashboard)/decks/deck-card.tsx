@@ -1,36 +1,52 @@
+import { CategoryIcon } from "@/components/shared";
 import { Button } from "@/components/ui/button";
+import { colorMapDeckCard as colorMap } from "@/constants";
 import type { TDeck } from "@/services/types";
-import { BookOpen, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import Link from "next/link";
 import { ComponentProps } from "react";
+
+const fallback = colorMap.blue;
 
 type DeckCardProps = {
   deck: TDeck;
 } & ComponentProps<"div">;
 
-//TODO: colors in categories
-
 export const DeckCard = ({ deck, ...props }: DeckCardProps) => {
+  const color = deck.category.color;
+  const colorClasses = colorMap[color as keyof typeof colorMap] || fallback;
+
   return (
     <div
       {...props}
-      className="bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-800 dark:via-gray-900 dark:to-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-700 shadow-sm hover:shadow-md transition-colors mb-4 flex flex-col"
+      className={`
+        ${colorClasses.gradient}
+        p-4 rounded-lg ${colorClasses.border}
+        shadow-sm hover:shadow-md transition-colors mb-4 flex flex-col
+      `}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
           {/*TODO: */}
           <Link href={`/decks/${deck.id}`} className="block">
             <div className="flex items-center space-x-3 mb-2">
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center shadow-sm">
-                <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div
+                className={`w-10 h-10 ${colorClasses.iconBg} rounded-lg flex items-center justify-center shadow-sm`}
+              >
+                <CategoryIcon
+                  type={deck.category.icon}
+                  className={`w-5 h-5 ${colorClasses.icon}`}
+                />
               </div>
               <div className="flex-1">
                 <div className="flex items-center space-x-2">
                   <h3 className="font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors">
                     {deck.name}
                   </h3>
-                  <span className="px-2 py-1 text-xs rounded-full bg-blue-200 dark:bg-blue-700 text-blue-800 dark:text-blue-200 font-semibold shadow">
-                    {deck.category}
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full font-semibold shadow ${colorClasses.badge}`}
+                  >
+                    {deck.category.name}
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -52,7 +68,9 @@ export const DeckCard = ({ deck, ...props }: DeckCardProps) => {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <p className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                  <p
+                    className={`text-sm font-medium ${colorClasses.masteryText}`}
+                  >
                     {deck.mastery}%
                   </p>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
@@ -62,17 +80,19 @@ export const DeckCard = ({ deck, ...props }: DeckCardProps) => {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="ml-4 border-blue-300 dark:border-blue-600"
+                  className={`ml-4 ${colorClasses.buttonBorder}`}
                 >
-                  <Play className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <Play className={`w-4 h-4 ${colorClasses.play}`} />
                 </Button>
               </div>
             </div>
 
             {/* Mastery Progress Bar */}
-            <div className="w-full bg-blue-100 dark:bg-blue-800 rounded-full h-2 mt-3 mb-1">
+            <div
+              className={`w-full ${colorClasses.progressBg} rounded-full h-2 mt-3 mb-1`}
+            >
               <div
-                className="bg-blue-500 dark:bg-blue-400 h-2 rounded-full transition-all"
+                className={`${colorClasses.progress} h-2 rounded-full transition-all`}
                 style={{ width: `${deck.mastery}%`, minWidth: "1px" }}
               />
             </div>

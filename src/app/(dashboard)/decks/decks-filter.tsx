@@ -5,11 +5,10 @@ import { useListCategories } from "@/hooks/use-list-categories.hook";
 import { CategoryFilter, SortFilter } from "./(filters)";
 export function DecksFilter() {
   //TODO: change type to array
-  const { data: categories, isLoading } = useListCategories();
+  const { data: _categories, isLoading } = useListCategories();
 
-  // const categories = [
-  //   "programming",
-  //   "design",
+  const categories = _categories?.map((cat) => cat.name);
+
   //   "language",
   //   "education",
   //   "sadasdadsaads",

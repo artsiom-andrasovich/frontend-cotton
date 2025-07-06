@@ -1,5 +1,6 @@
 import { axiosWithAuth } from "@/api/interceptors";
 import { ApiPaths, DEFAULT_DECK_PAGE_LIMIT } from "@/constants";
+import { DeckFormData } from "@/hooks/use-update-deck.hook";
 import { AxiosResponse } from "axios";
 import { TListDecks } from "./types";
 
@@ -18,6 +19,12 @@ export const deskService = {
         },
       }
     );
+    return res;
+  },
+  async createDeck(data: DeckFormData): Promise<AxiosResponse<string>> {
+    console.log(data);
+
+    const res = await axiosWithAuth.post(ApiPaths.deck.CREATE_DECK, data);
     return res;
   },
 };
