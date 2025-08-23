@@ -1,9 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
 import { DeckHeader } from "./deck-header";
 import { DecksFilter } from "./decks-filter";
 import { DecksList } from "./decks-list";
-import { ResultsCounts } from "./results-count";
 
 export default function DecksPage() {
   // Get unique categories
@@ -16,13 +16,16 @@ export default function DecksPage() {
       <DeckHeader />
 
       {/* Filters and Sort - Design Only */}
-      <DecksFilter />
-
+      <Suspense>
+        <DecksFilter />
+      </Suspense>
       {/* Results Count */}
-      <ResultsCounts />
+      {/* <ResultsCounts /> */}
 
       {/* Decks Grid */}
-      <DecksList />
+      <Suspense>
+        <DecksList />
+      </Suspense>
     </div>
   );
 }

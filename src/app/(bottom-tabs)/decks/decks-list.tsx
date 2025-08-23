@@ -10,6 +10,7 @@ import { DeckCard } from "./deck-card";
 export function DecksList() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useGetDecks();
+
   const decks = data?.pages.flatMap((page) => page.items) ?? [];
 
   const { ref, inView } = useInView({

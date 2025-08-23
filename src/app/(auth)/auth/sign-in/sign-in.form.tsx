@@ -121,7 +121,7 @@ export function SignInForm() {
                 <FormMessage />
                 <div className="text-right">
                   <Link
-                    href={AppPaths.FORGOT_PASSWORD}
+                    href={AppPaths.auth.FORGOT_PASSWORD}
                     className="text-sm text-primary hover:underline"
                   >
                     Forgot password?
@@ -169,7 +169,7 @@ export function SignInForm() {
           Don&apos;t have an account?{" "}
         </span>
         <Link
-          href={AppPaths.SIGN_UP}
+          href={AppPaths.auth.SIGN_UP}
           className="font-semibold text-primary hover:underline"
         >
           Sign up

@@ -49,7 +49,7 @@ export function SignUpForm() {
         userId: res.id,
       });
 
-      router.push(AppPaths.CONFIRM + `?${params}`);
+      router.push(AppPaths.auth.CONFIRM + `?${params}`);
     } catch (err) {
       setError(errorCatch(err));
     } finally {
@@ -210,7 +210,7 @@ export function SignUpForm() {
           Already have an account?{" "}
         </span>
         <Link
-          href={AppPaths.SIGN_IN}
+          href={AppPaths.auth.SIGN_IN}
           className="font-semibold text-primary hover:underline"
         >
           Sign in

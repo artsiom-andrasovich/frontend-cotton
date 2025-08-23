@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { AppPaths } from "@/constants";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 
 export function DeckHeader() {
   return (
@@ -12,9 +14,12 @@ export function DeckHeader() {
           Manage your flashcard collections
         </p>
       </div>
-      <Button className="bg-primary hover:bg-primary/90">
-        <Plus className="w-4 h-4 mr-2" />
-        Create Deck
+
+      <Button asChild className="bg-primary hover:bg-primary/90">
+        <Link href={AppPaths.deck.DECK} className="flex items-center">
+          <Plus className="w-4 h-4 mr-2" />
+          Create Deck
+        </Link>
       </Button>
     </div>
   );

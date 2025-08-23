@@ -1,14 +1,15 @@
 import { ConfirmForm } from "./confirm.form";
 
 interface ConfirmPageProps {
-  searchParams: {
+  searchParams: Promise<{
     userId?: string;
     email?: string;
-  };
+  }>;
 }
 
-export default function ConfirmPage({ searchParams }: ConfirmPageProps) {
-  const { userId, email } = searchParams;
+export default async function ConfirmPage({ searchParams }: ConfirmPageProps) {
+  const params = await searchParams;
+  const { email, userId } = params;
 
   return (
     <div className="flex items-center justify-center p-4">

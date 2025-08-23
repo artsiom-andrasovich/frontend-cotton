@@ -23,10 +23,20 @@ export const ApiPaths = {
     UPDATE_DECK: "/deck/update-deck",
     DELETE_DECK: "/deck/delete-deck",
     LIST_DECKS: "/deck/list-user-decks",
-    LIST_DECK_CARDS: "/deck/list-deck-cards",
+    GET_DECK_BY_ID: "/deck/get-deck",
   },
   categories: {
     LIST_USER_CATEGORIES: "/categories/list-user-categories",
+  },
+  cards: {
+    CREATE_CARD: "/card/create-card",
+    LIST_CARDS: "/card/list-cards",
+    UPDATE_CARD: "/card/update-card",
+    GET_CARD_BY_ID: "/card/get-card-by-id",
+  },
+  fsrs: {
+    GAME_PARAMS: (deckId: string) => `/fsrs/game-params/${deckId}`,
+    GAME_CARDS: (deckId: string) => `fsrs/game-cards/${deckId}`,
   },
   //reset-password
 } as const;

@@ -28,7 +28,6 @@ export const useFilters = (): TReturn => {
   ] = useSet(new Set<string>(searchParams.get("categories")?.split(",")));
 
   const [sortBy, setSortBy] = useState(searchParams.get("sortBy") || "recent");
-  console.log(sortBy);
 
   return {
     selectedCategories,

@@ -31,7 +31,7 @@ export function ConfirmForm({ userId, email }: ConfirmFormProps) {
   }, [otp]);
 
   if (!userId || !email) {
-    router.push(AppPaths.SIGN_IN);
+    router.push(AppPaths.auth.SIGN_IN);
     return null;
   }
 

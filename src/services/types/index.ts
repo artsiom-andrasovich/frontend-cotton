@@ -1,4 +1,5 @@
 export * from "./auth.types";
+export * from "./card.types";
 export * from "./category.types";
 export * from "./deck.types";
 export * from "./query-filters.types";

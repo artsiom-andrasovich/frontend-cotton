@@ -1,7 +1,7 @@
 "use client";
 
 import { useFilters, useQueryFilters } from "@/hooks";
-import { useListCategories } from "@/hooks/use-list-categories.hook";
+import { useListCategories } from "@/hooks/categories/use-list-categories.hook";
 import { CategoryFilter, SortFilter } from "./(filters)";
 export function DecksFilter() {
   //TODO: change type to array

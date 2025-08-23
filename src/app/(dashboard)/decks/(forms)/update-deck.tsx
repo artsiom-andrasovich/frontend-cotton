@@ -1,12 +1,14 @@
 "use client";
 import { errorCatch } from "@/api/error";
+import { Navbar } from "@/components/shared";
 import { Button } from "@/components/ui/button";
-import { useListCategories } from "@/hooks/use-list-categories.hook";
-import { useDeckMutation } from "@/hooks/use-update-deck.hook";
-import { type TUpdateDeck, UpdateDeckSchema } from "@/services/types";
+import { AppPaths } from "@/constants";
+import { useDeckMutation, useGetDeckById } from "@/hooks";
+import { useListCategories } from "@/hooks/categories/use-list-categories.hook";
+import { TUpdateDeck, UpdateDeckSchema } from "@/services/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CategorySelector } from "./category-selector";
 import { DeckFields } from "./deck-fields";
@@ -17,15 +19,20 @@ type TUpdateDeckProps = {
 
 export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
   const FormName = deckId ? "Update Deck" : "Create deck";
-  const { data: backendCategories, isLoading, isError } = useListCategories();
+  const {
+    data: backendCategories = [],
+    isLoading: isLoadingCategories,
+    isError,
+  } = useListCategories();
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const router = useRouter();
   const mutation = useDeckMutation();
 
-  const allCategories = useMemo(() => {
-    return Array.isArray(backendCategories) ? backendCategories : [];
-  }, [backendCategories]);
+  // 🔹 Получаем колоду, если это update
+  const { data: deckData, isLoading: isLoadingDeck } = useGetDeckById(
+    deckId || ""
+  );
 
   const form = useForm<TUpdateDeck>({
     resolver: zodResolver(UpdateDeckSchema),
@@ -38,13 +45,22 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
     },
   });
 
+  // 🔹 При загрузке данных (edit) — обновляем значения формы
   useEffect(() => {
-    if (allCategories.length > 0) {
-      form.setValue("category", allCategories[0].name);
-      form.setValue("color", allCategories[0].color || "blue");
-      form.setValue("icon", allCategories[0].icon || "bookOpen");
+    if (deckData) {
+      form.reset({
+        name: deckData.name || "",
+        description: deckData.description || "",
+        category: deckData.category?.name || "",
+        color: deckData.category?.color || "blue",
+        icon: deckData.category?.icon || "bookOpen",
+      });
+    } else if (!deckId && backendCategories.length > 0) {
+      form.setValue("category", backendCategories[0].name);
+      form.setValue("color", backendCategories[0].color || "blue");
+      form.setValue("icon", backendCategories[0].icon || "bookOpen");
     }
-  }, [allCategories]);
+  }, [deckData, deckId, backendCategories]);
 
   const {
     handleSubmit,
@@ -55,7 +71,9 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
   const onSubmit = async (data: TUpdateDeck) => {
     try {
       const { name, description, category: categoryName, color, icon } = data;
-      const newDeckId = await mutation.mutateAsync({
+
+      const res = await mutation.mutateAsync({
+        deckId,
         data: {
           name,
           description,
@@ -68,8 +86,14 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
       });
 
       const { toast } = await import("react-hot-toast");
-      toast.success("Deck created!");
-      router.push(`/decks/${newDeckId}`);
+      if (deckId) {
+        toast.success("Deck updated!");
+
+        router.push(`/decks/${deckId}`);
+      } else {
+        toast.success("Deck created!");
+        router.push(`/decks/${res}`);
+      }
     } catch (error) {
       const { toast } = await import("react-hot-toast");
       toast.error(errorCatch(error));
@@ -79,10 +103,11 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
   const handleCancelCategory = () => {
     setIsCreatingCategory(false);
     setNewCategory("");
-    if (allCategories.length > 0) {
-      setValue("category", allCategories[0].name);
-      setValue("color", allCategories[0].color);
-      setValue("icon", allCategories[0].icon);
+
+    if (backendCategories.length > 0) {
+      setValue("category", backendCategories[0].name);
+      setValue("color", backendCategories[0].color);
+      setValue("icon", backendCategories[0].icon);
     }
   };
 
@@ -94,29 +119,46 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
     );
   }
 
+  if (deckId && isLoadingDeck) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <span className="text-gray-600 dark:text-gray-200">
+          Loading deck...
+        </span>
+      </div>
+    );
+  }
+  const path = deckId ? AppPaths.deck.DECKS + `/${deckId}` : undefined;
+
   return (
-    <div className="max-w-lg mx-auto mt-10 p-6 bg-white dark:bg-gray-900 rounded-lg shadow">
-      <h1 className="text-2xl font-bold mb-6 text-center">{FormName}</h1>
-      <FormProvider {...form}>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <DeckFields form={form} />
+    <>
+      <Navbar path={path} title={FormName} />
+      <div className="max-w-lg mx-auto p-6">
+        <FormProvider {...form}>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <DeckFields form={form} />
 
-          <CategorySelector
-            form={form}
-            allCategories={allCategories}
-            isCreatingCategory={isCreatingCategory}
-            setIsCreatingCategory={setIsCreatingCategory}
-            newCategory={newCategory}
-            setNewCategory={setNewCategory}
-            onCancelCategory={handleCancelCategory}
-            disabled={isLoading}
-          />
+            <CategorySelector
+              form={form}
+              allCategories={backendCategories}
+              isCreatingCategory={isCreatingCategory}
+              setIsCreatingCategory={setIsCreatingCategory}
+              newCategory={newCategory}
+              setNewCategory={setNewCategory}
+              onCancelCategory={handleCancelCategory}
+              disabled={isLoadingCategories}
+            />
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Updating..." : FormName}
-          </Button>
-        </form>
-      </FormProvider>
-    </div>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting
+                ? deckId
+                  ? "Updating..."
+                  : "Creating..."
+                : FormName}
+            </Button>
+          </form>
+        </FormProvider>
+      </div>
+    </>
   );
 }

@@ -99,7 +99,7 @@ export function CategorySelector({
                         aria-label="Choose icon"
                       >
                         <CategoryIcon
-                          type={iconField.value as TCategoryIcon}
+                          type={(iconField.value as TCategoryIcon) ?? "mail"}
                           className="w-6 h-6 text-primary"
                         />
                       </button>

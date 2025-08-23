@@ -2,7 +2,7 @@ import { colorMap } from "@/constants";
 import { cn } from "@/lib/utils";
 type TColorPickerProps = {
   activeColor: keyof typeof colorMap;
-  setActiveColor: (key: string) => void;
+  setActiveColor: (key: keyof typeof colorMap) => void;
 };
 
 export const ColorPicker = ({

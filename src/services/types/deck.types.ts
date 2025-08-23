@@ -11,15 +11,17 @@ export type TDeck = {
   cardCount: number;
   lastStudied: string;
   totalTime: string;
-  createdAt: Date;
+  createdAt: string;
+};
+
+export type TDeckCursor = {
+  fieldValue: string | number;
+  id: string;
 };
 
 export type TListDecks = {
   items: TDeck[];
-  page: number;
-  limit: number;
-  totalCount: number;
-  totalPages: number;
+  nextCursor: TDeckCursor | null;
   hasNextPage: boolean;
 };
 
@@ -32,3 +34,9 @@ export const UpdateDeckSchema = z.object({
 });
 
 export type TUpdateDeck = z.infer<typeof UpdateDeckSchema>;
+
+export type TUpdateDeckDto = {
+  deckId: string;
+  description?: string;
+  category: TCategory;
+};

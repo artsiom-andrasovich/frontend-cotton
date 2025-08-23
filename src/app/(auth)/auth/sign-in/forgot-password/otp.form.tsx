@@ -117,7 +117,7 @@ export function OTPForm({ email, onCodeSubmitted }: OTPFormProps) {
         </p>
 
         <Link
-          href={AppPaths.SIGN_IN}
+          href={AppPaths.auth.SIGN_IN}
           className="inline-flex items-center text-sm text-primary hover:underline"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />

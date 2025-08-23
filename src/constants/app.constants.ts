@@ -3,10 +3,19 @@ export const passwordComplexity =
 
 export const DEFAULT_DECK_PAGE_LIMIT = 5;
 
+export const DEFAULT_CARD_PAGE_LIMIT = 5;
+
 export const POSSIBLE_SORT_BY_DECK = [
   { value: "recent", label: "Recently Studied" },
   { value: "mastery", label: "Mastery" },
   { value: "cards", label: "Card Count" },
   { value: "alphabetical", label: "A-Z" },
+  { value: "newest", label: "Newest" },
+];
+
+export const POSSIBLE_SORT_BY_CARD = [
+  { value: "easiest", label: "Easiest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "hardest", label: "Hardest" },
   { value: "newest", label: "Newest" },
 ];

@@ -71,7 +71,7 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
       const { toast } = await import("react-hot-toast");
       toast.success("Password reset successfully");
 
-      push(AppPaths.SIGN_IN);
+      push(AppPaths.auth.SIGN_IN);
     } catch (err) {
       setError(errorCatch(err));
     } finally {
