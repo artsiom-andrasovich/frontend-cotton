@@ -4,10 +4,12 @@ import { errorCatch } from "@/api/error";
 import { authService } from "@/services/auth.service";
 import { SignUpSchema, type TSignUpForm } from "@/services/types/auth.types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,9 +26,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { OAuthButtons } from "../oauth-buttons";
 
 export function SignUpForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const router = useRouter();
 
   const form = useForm<TSignUpForm>({
@@ -39,22 +39,22 @@ export function SignUpForm() {
     },
   });
 
-  const onSubmit = async (data: TSignUpForm) => {
-    try {
-      setIsLoading(true);
-      setError("");
-      const { data: res } = await authService.signUp(data);
+  const signUpMutation = useMutation({
+    mutationFn: (data: TSignUpForm) => authService.signUp(data),
+    onSuccess: (response) => {
       const params = new URLSearchParams({
-        email: res.email,
-        userId: res.id,
+        email: response.data.email,
+        userId: response.data.id,
       });
-
       router.push(AppPaths.auth.CONFIRM + `?${params}`);
-    } catch (err) {
-      setError(errorCatch(err));
-    } finally {
-      setIsLoading(false);
-    }
+    },
+    onError: (err) => {
+      toast.error(errorCatch(err));
+    },
+  });
+
+  const onSubmit = (data: TSignUpForm) => {
+    signUpMutation.mutate(data);
   };
 
   return (
@@ -83,7 +83,7 @@ export function SignUpForm() {
                     {...field}
                     type="text"
                     placeholder="Enter your name"
-                    disabled={isLoading}
+                    disabled={signUpMutation.isPending}
                     className="h-12 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700"
                   />
                 </FormControl>
@@ -105,7 +105,7 @@ export function SignUpForm() {
                     {...field}
                     type="email"
                     placeholder="Enter your email"
-                    disabled={isLoading}
+                    disabled={signUpMutation.isPending}
                     className="h-12 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700"
                   />
                 </FormControl>
@@ -128,7 +128,7 @@ export function SignUpForm() {
                       {...field}
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
-                      disabled={isLoading}
+                      disabled={signUpMutation.isPending}
                       className="h-12 pr-10 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700"
                     />
                     <Button
@@ -137,7 +137,7 @@ export function SignUpForm() {
                       size="sm"
                       className="absolute right-0 top-0 h-12 px-3 py-2 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
-                      disabled={isLoading}
+                      disabled={signUpMutation.isPending}
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -165,7 +165,7 @@ export function SignUpForm() {
                     {...field}
                     type={showPassword ? "text" : "password"}
                     placeholder="Confirm your password"
-                    disabled={isLoading}
+                    disabled={signUpMutation.isPending}
                     className="h-12 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700"
                   />
                 </FormControl>
@@ -174,14 +174,18 @@ export function SignUpForm() {
             )}
           />
 
-          {error && (
+          {signUpMutation.isError && (
             <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/30 p-3 rounded-md">
-              {error}
+              {errorCatch(signUpMutation.error)}
             </div>
           )}
 
-          <Button type="submit" className="w-full h-12" disabled={isLoading}>
-            {isLoading ? (
+          <Button
+            type="submit"
+            className="w-full h-12"
+            disabled={signUpMutation.isPending}
+          >
+            {signUpMutation.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Creating account...
@@ -219,3 +223,4 @@ export function SignUpForm() {
     </div>
   );
 }
+

@@ -11,7 +11,11 @@ import { useCardsFilters } from "@/hooks/use-cards-filters.hook";
 import { ChevronDown, SortAsc } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export function CardsFilter() {
+export function CardsFilter({
+  onSearchFocusChange,
+}: {
+  onSearchFocusChange?: (isFocused: boolean) => void;
+}) {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { setSortBy, sortBy, search, setSearch } = useCardsFilters();
   useCardsQueryFilters({ sortBy, search });
@@ -27,7 +31,11 @@ export function CardsFilter() {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
       <div className="flex gap-2 w-full sm:w-auto">
-        <AnimatedSearchInput search={search} setSearch={setSearch} />
+        <AnimatedSearchInput
+          search={search}
+          setSearch={setSearch}
+          onFocusChange={onSearchFocusChange}
+        />
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline" className="flex  items-center gap-2">

@@ -8,26 +8,48 @@ import {
 } from "@/components/ui/input-otp";
 import { AppPaths } from "@/constants";
 import { authService } from "@/services/auth.service";
+import { useMutation } from "@tanstack/react-query";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Loader2, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface ConfirmFormProps {
   userId?: string;
   email?: string;
 }
-
+//TEST:
+//TODO:
 export function ConfirmForm({ userId, email }: ConfirmFormProps) {
   const [otp, setOtp] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState("");
   const router = useRouter();
-  // TODO: change on react query
+
+  const confirmMutation = useMutation({
+    mutationFn: (code: string) =>
+      authService.activateAccount({ userId: userId!, code }),
+    onSuccess: () => {
+      toast.success("Your account has been activated");
+      router.push(AppPaths.HOME);
+    },
+    onError: () => {
+      setOtp("");
+    },
+  });
+
+  const resendMutation = useMutation({
+    mutationFn: () => authService.resendActivationCode(email!),
+    onSuccess: () => {
+      toast.success("Verification code has been resent to your email.");
+    },
+    onError: () => {
+      toast.error("Failed to resend code. Please try again.");
+    },
+  });
+
   useEffect(() => {
-    if (otp.length === 6) {
-      confirmCode();
+    if (otp.length === 6 && !confirmMutation.isPending) {
+      confirmMutation.mutate(otp);
     }
   }, [otp]);
 
@@ -36,41 +58,7 @@ export function ConfirmForm({ userId, email }: ConfirmFormProps) {
     return null;
   }
 
-  const confirmCode = async () => {
-    if (otp.length === 6) {
-      try {
-        setIsLoading(true);
-        setIsSubmitted(true);
-        setError("");
-
-        await authService.activateAccount({ userId, code: otp });
-        const { toast } = await import("react-hot-toast");
-        toast.success("Your account has been activated");
-
-        router.push(AppPaths.HOME);
-      } catch {
-        setError("Invalid or expired verification code. Please try again.");
-        setIsSubmitted(false);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-
-  const handleResendCode = async () => {
-    try {
-      setIsLoading(true);
-      setError("");
-
-      await authService.resendActivationCode(email);
-
-      setError("Verification code has been resent to your email.");
-    } catch {
-      setError("Failed to resend code. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const isLoading = confirmMutation.isPending || resendMutation.isPending;
 
   return (
     <div className="w-full max-w-sm mx-auto space-y-6">
@@ -94,7 +82,7 @@ export function ConfirmForm({ userId, email }: ConfirmFormProps) {
             maxLength={6}
             value={otp}
             onChange={setOtp}
-            disabled={isLoading || isSubmitted}
+            disabled={isLoading || confirmMutation.isSuccess}
             className="justify-center"
             pattern={REGEXP_ONLY_DIGITS}
           >
@@ -109,16 +97,16 @@ export function ConfirmForm({ userId, email }: ConfirmFormProps) {
           </InputOTP>
         </div>
 
-        {isLoading && (
+        {confirmMutation.isPending && (
           <div className="text-center">
             <Loader2 className="mx-auto h-6 w-6 animate-spin text-primary" />
             <p className="text-sm text-muted-foreground mt-2">Verifying...</p>
           </div>
         )}
 
-        {error && (
+        {confirmMutation.isError && (
           <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md text-center">
-            {error}
+            Invalid or expired verification code. Please try again.
           </div>
         )}
       </div>
@@ -130,12 +118,13 @@ export function ConfirmForm({ userId, email }: ConfirmFormProps) {
         <Button
           variant="link"
           className="p-0 h-auto font-semibold"
-          onClick={handleResendCode}
+          onClick={() => resendMutation.mutate()}
           disabled={isLoading}
         >
-          Resend
+          {resendMutation.isPending ? "Sending..." : "Resend"}
         </Button>
       </div>
     </div>
   );
 }
+

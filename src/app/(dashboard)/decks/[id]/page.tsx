@@ -44,7 +44,7 @@ export default function DeckDetailPage({
 
   return (
     <>
-      <Navbar title={deck.name}>
+      <Navbar title={deck.name} path={AppPaths.deck.DECKS}>
         <Button variant="outline" size="sm">
           <Link href={AppPaths.deck.DECK + `?deckId=${deckId}`}>
             <Pencil className="w-4 h-4 " />

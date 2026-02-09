@@ -5,21 +5,32 @@ import { Input } from "../ui";
 type AnimatedSearchInputProps = {
   search: string;
   setSearch: (val: string) => void;
+  onFocusChange?: (isFocused: boolean) => void;
 };
 
 export function AnimatedSearchInput({
   search,
   setSearch,
+  onFocusChange,
 }: AnimatedSearchInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const clearingRef = useRef(false);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    onFocusChange?.(true);
+  };
+
   const handleBlur = () => {
     if (clearingRef.current) {
       clearingRef.current = false;
       return;
     }
-    if (search.length === 0) setIsFocused(false);
+    if (search.length === 0) {
+      setIsFocused(false);
+      onFocusChange?.(false);
+    }
   };
 
   const handleClearPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
@@ -39,6 +50,7 @@ export function AnimatedSearchInput({
     requestAnimationFrame(() => {
       el.blur();
       setIsFocused(false);
+      onFocusChange?.(false);
     });
   };
 
@@ -57,7 +69,7 @@ export function AnimatedSearchInput({
           autoCapitalize="none"
           placeholder={isFocused ? "Search cards..." : ""}
           value={search}
-          onFocus={() => setIsFocused(true)}
+          onFocus={handleFocus}
           onBlur={handleBlur}
           onChange={(e) => setSearch(e.target.value)}
           className={`w-full transition-all duration-300 z-10 appearance-none ${

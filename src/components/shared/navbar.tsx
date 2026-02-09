@@ -1,7 +1,7 @@
 import { ArrowBack } from "../ui";
 
 type NavbarProps = {
-  title?: string;
+  title?: React.ReactNode;
   path?: string;
   children?: React.ReactNode;
 };

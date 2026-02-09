@@ -12,10 +12,12 @@ import { Input } from "@/components/ui/input";
 import { AppPaths, passwordComplexity } from "@/constants";
 import { resetPasswordService } from "@/services/reset-password.service";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { z } from "zod";
 
 const passwordResetSchema = z
@@ -42,8 +44,6 @@ type ChangePasswordFormProps = {
 };
 
 export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { push } = useRouter();
 
@@ -55,28 +55,24 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
     },
   });
 
-  const handlePasswordSubmit = async (data: PasswordResetFormData) => {
-    try {
-      setIsLoading(true);
-      setError("");
-
-      // TODO: Call your password reset service here
-      // await authService.resetPassword(email, data.password);
-      await resetPasswordService.resetPasswordByCode({
+  const resetMutation = useMutation({
+    mutationFn: (data: PasswordResetFormData) =>
+      resetPasswordService.resetPasswordByCode({
         code,
         email,
         ...data,
-      });
-
-      const { toast } = await import("react-hot-toast");
+      }),
+    onSuccess: () => {
       toast.success("Password reset successfully");
-
       push(AppPaths.auth.SIGN_IN);
-    } catch (err) {
-      setError(errorCatch(err));
-    } finally {
-      setIsLoading(false);
-    }
+    },
+    onError: (err) => {
+      toast.error(errorCatch(err));
+    },
+  });
+
+  const handlePasswordSubmit = (data: PasswordResetFormData) => {
+    resetMutation.mutate(data);
   };
 
   return (
@@ -102,7 +98,7 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter new password"
-                      disabled={isLoading}
+                      disabled={resetMutation.isPending}
                       className="h-12 pr-10"
                       {...field}
                     />
@@ -110,7 +106,7 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                      disabled={isLoading}
+                      disabled={resetMutation.isPending}
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -136,7 +132,7 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Confirm new password"
-                      disabled={isLoading}
+                      disabled={resetMutation.isPending}
                       className="h-12 pr-10"
                       {...field}
                     />
@@ -147,14 +143,18 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
             )}
           />
 
-          {error && (
+          {resetMutation.isError && (
             <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
-              {error}
+              {errorCatch(resetMutation.error)}
             </div>
           )}
 
-          <Button type="submit" className="w-full h-12" disabled={isLoading}>
-            {isLoading ? (
+          <Button
+            type="submit"
+            className="w-full h-12"
+            disabled={resetMutation.isPending}
+          >
+            {resetMutation.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Resetting...
@@ -168,3 +168,4 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
     </div>
   );
 }
+

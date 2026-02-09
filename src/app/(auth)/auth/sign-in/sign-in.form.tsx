@@ -4,10 +4,12 @@ import { errorCatch } from "@/api/error";
 import { authService } from "@/services/auth.service";
 import { SignInSchema, type TSignInForm } from "@/services/types/auth.types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { AppPaths } from "@/constants";
@@ -24,9 +26,7 @@ import { Input } from "../../../../components/ui/input";
 import { OAuthButtons } from "../oauth-buttons";
 
 export function SignInForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const router = useRouter();
 
   const form = useForm<TSignInForm>({
@@ -36,18 +36,19 @@ export function SignInForm() {
       password: "",
     },
   });
-  // TODO: change on react-query
-  const onSubmit = async (data: TSignInForm) => {
-    try {
-      setIsLoading(true);
-      setError("");
-      await authService.signIn(data);
-      router.push("/"); // Redirect to home page after successful sign-in
-    } catch (err) {
-      setError(errorCatch(err));
-    } finally {
-      setIsLoading(false);
-    }
+
+  const signInMutation = useMutation({
+    mutationFn: (data: TSignInForm) => authService.signIn(data),
+    onSuccess: () => {
+      router.push("/");
+    },
+    onError: (err) => {
+      toast.error(errorCatch(err));
+    },
+  });
+
+  const onSubmit = (data: TSignInForm) => {
+    signInMutation.mutate(data);
   };
 
   return (
@@ -76,7 +77,7 @@ export function SignInForm() {
                     {...field}
                     type="email"
                     placeholder="Enter your email"
-                    disabled={isLoading}
+                    disabled={signInMutation.isPending}
                     className="h-12 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700"
                   />
                 </FormControl>
@@ -99,7 +100,7 @@ export function SignInForm() {
                       {...field}
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
-                      disabled={isLoading}
+                      disabled={signInMutation.isPending}
                       className="h-12 pr-10 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700"
                     />
                     <Button
@@ -108,7 +109,7 @@ export function SignInForm() {
                       size="sm"
                       className="absolute right-0 top-0 h-12 px-3 py-2 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
-                      disabled={isLoading}
+                      disabled={signInMutation.isPending}
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -131,14 +132,18 @@ export function SignInForm() {
             )}
           />
 
-          {error && (
+          {signInMutation.isError && (
             <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/30 p-3 rounded-md">
-              {error}
+              {errorCatch(signInMutation.error)}
             </div>
           )}
 
-          <Button type="submit" className="w-full h-12" disabled={isLoading}>
-            {isLoading ? (
+          <Button
+            type="submit"
+            className="w-full h-12"
+            disabled={signInMutation.isPending}
+          >
+            {signInMutation.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Signing in...
@@ -178,3 +183,4 @@ export function SignInForm() {
     </div>
   );
 }
+

@@ -24,6 +24,7 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
     isLoading: isLoadingCategories,
     isError,
   } = useListCategories();
+  const hasCategories = backendCategories.length > 0;
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const router = useRouter();
@@ -55,12 +56,15 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
         color: deckData.category?.color || "blue",
         icon: deckData.category?.icon || "bookOpen",
       });
-    } else if (!deckId && backendCategories.length > 0) {
+    } else if (!deckId && hasCategories) {
       form.setValue("category", backendCategories[0].name);
       form.setValue("color", backendCategories[0].color || "blue");
       form.setValue("icon", backendCategories[0].icon || "bookOpen");
+    } else if (!deckId && !hasCategories && !isLoadingCategories) {
+      // No categories exist — auto-enable creation mode
+      setIsCreatingCategory(true);
     }
-  }, [deckData, deckId, backendCategories]);
+  }, [deckData, deckId, backendCategories, hasCategories, isLoadingCategories]);
 
   const {
     handleSubmit,
@@ -101,14 +105,14 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
   };
 
   const handleCancelCategory = () => {
+    // Can't cancel if there are no categories to fall back to
+    if (!hasCategories) return;
+
     setIsCreatingCategory(false);
     setNewCategory("");
-
-    if (backendCategories.length > 0) {
-      setValue("category", backendCategories[0].name);
-      setValue("color", backendCategories[0].color);
-      setValue("icon", backendCategories[0].icon);
-    }
+    setValue("category", backendCategories[0].name);
+    setValue("color", backendCategories[0].color);
+    setValue("icon", backendCategories[0].icon);
   };
 
   if (isError) {

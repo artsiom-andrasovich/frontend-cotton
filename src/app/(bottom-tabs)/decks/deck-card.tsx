@@ -27,7 +27,6 @@ export const DeckCard = ({ deck, ...props }: DeckCardProps) => {
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          {/*TODO: */}
           <Link href={`/decks/${deck.id}`} className="block">
             <div className="flex items-center space-x-3 mb-2">
               <div
