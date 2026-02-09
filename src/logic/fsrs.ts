@@ -29,16 +29,13 @@ export class FSRSCardGame {
   }
 
   rate(card: Card, rating: Rating) {
-    const { card: updatedCard, log } = this.fsrs.next(
+    const newCardWithLog = this.fsrs.next(
       card,
       new Date(),
       rating as unknown as Grade
     );
     //request to set new data
-  }
-
-  private gameEnded() {
-    //TODO: send data to the server
+    return newCardWithLog;
   }
 
   //TODO:

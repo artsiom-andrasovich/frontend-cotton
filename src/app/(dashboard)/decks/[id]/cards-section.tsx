@@ -4,29 +4,6 @@ import { AppPaths } from "@/constants";
 import { useGetListCards } from "@/hooks";
 import Link from "next/link";
 
-const sampleCards = [
-  {
-    id: 1,
-    front: "What is a variable in JavaScript?",
-    back: "A variable is a container for storing data values. It can hold different types of data like numbers, strings, objects, etc.",
-    difficulty: "easy",
-    lastReviewed: "2 hours ago",
-  },
-  {
-    id: 2,
-    front: "What is the difference between let, const, and var?",
-    back: "let: block-scoped, can be reassigned; const: block-scoped, cannot be reassigned; var: function-scoped, can be reassigned",
-    difficulty: "medium",
-    lastReviewed: "1 day ago",
-  },
-  {
-    id: 3,
-    front: "What is a function in JavaScript?",
-    back: "A function is a reusable block of code that performs a specific task. It can take parameters and return values.",
-    difficulty: "easy",
-    lastReviewed: "3 days ago",
-  },
-];
 
 export const CardsSection = ({ deckId }: { deckId: string }) => {
   const { data } = useGetListCards(deckId);

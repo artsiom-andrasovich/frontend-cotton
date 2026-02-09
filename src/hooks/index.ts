@@ -5,6 +5,7 @@ export * from "./categories/use-list-categories.hook";
 export * from "./decks/use-get-deck-by-id.hook";
 export * from "./decks/use-get-decks.hook";
 export * from "./decks/use-update-deck.hook";
+export * from "./fsrs/use-get-game-cars.hook";
 export * from "./use-cards-query-filters.hook";
 export * from "./use-filters.hook";
 export * from "./use-oauth.hook";

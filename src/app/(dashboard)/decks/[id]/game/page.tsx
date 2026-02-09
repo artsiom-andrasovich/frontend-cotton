@@ -2,81 +2,15 @@
 
 import { Navbar } from "@/components/shared";
 
+import { useGetGameCards } from "@/hooks";
+import { useFSRSParamsMutation } from "@/hooks/fsrs/use-update-fsrs-cards-params.hook";
 import { FlashCardGame } from "@/logic/fsrs";
+import { gameStorageService } from "@/services/game-storage.service";
 import { use, useEffect, useState } from "react";
+import { Rating } from "ts-fsrs";
+import { Stats } from "./(stats)/stats";
 import { FlashCardsSection } from "./flash-cards-section";
 import { ReactButtons } from "./react-buttons";
-
-// Mock data for demonstration
-const mockCards = [
-  {
-    id: "1",
-    question: `<h1>Заголовок</h1>
-  <p>Абзац с \<b>жирным</b>, <i>курсивом</i> иjdfslakjflaksdjfalskfjaslfjalsjfdaslfslf <code>кодом</code>.</p>
-  <ul>
-    <li>Элемент списка 1</li>
-    <li>Элемент <u>списка</u> 2</li>
-  </ul>
-  <blockquote>Цитата с <h1>Заh1>Заголовок</h1>
-  <p>Абзац с \<b>жирным</b>, <i>курсивом</i> и <code>кодом</code>.</p>
-  <ul>
-    <li>Элемент списка 1</li>
-    <li>Элемент <u>списка</u> 2</li>
-  </ul>
-  <blockquote>Цитата с <h1>Заh1>Заголовок</h1>
-  <p>Абзац с \<b>жирным</b>, <i>курсивом</i> и <code>кодом</code>.</p>
-  <ul>
-    <li>Элемент списка 1</li>
-    <li>Элемент <u>списка</u> 2</li>
-  </ul>
-  <blockquote>Цитата с <h1>Заh1>Заголовок</h1>
-  <p>Абзац с \<b>жирным</b>, <i>курсивом</i> и <code>кодом</code>.</p>
-  <ul>
-    <li>Элемент списка 1</li>
-    <li>Элемент <u>списка</u> 2</li>
-  </ul>
-  </ul>
-  <blockquote>Цитата с <span style="color:red;">цветом</span></blockquote>`,
-    answer: `<h1>Заголовок</h1>
-  <p>Абзац с \<b>жирным</b>, <i>курсивом</i> и <code>кодом</code>.</p>
-  <ul>
-    <li>Элемент списка 1</li>
-    <li>Элемент <u>списка</u> 2</li>
-  </ul>
-  <blockquote>Цитата с <span style="color:red;">цветом</span></blockquote>`,
-    difficulty: 3,
-    lastReviewed: "2 days ago",
-    nextReview: "in 1 day",
-  },
-  {
-    id: "2",
-    question: "Explain the concept of photosynthesis",
-    answer:
-      "<p><pre><code class=\"language-javascript\">function test(){ return 'Literature'; }</code></pre></p>",
-    difficulty: 7,
-    lastReviewed: "1 week ago",
-    nextReview: "in 3 days",
-  },
-  {
-    id: "3",
-    question: "What is the Pythagorean theorem?",
-    answer:
-      "The Pythagorean theorem states that in a right triangle, the square of the length of the hypotenuse (the side opposite the right angle) is equal to the sum of the squares of the lengths of the other two sides: a² + b² = c²",
-    difficulty: 5,
-    lastReviewed: "3 days ago",
-    nextReview: "in 2 days",
-  },
-  {
-    id: "4",
-    question: "Define the term 'democracy'",
-    answer:
-      "Democracy is a system of government in which power is vested in the people, who rule either directly or through freely elected representatives. It is characterized by free and fair elections, protection of individual rights, and the rule of law.",
-    difficulty: 4,
-    lastReviewed: "5 days ago",
-    nextReview: "in 1 week",
-  },
-];
-
 export default function GamePage({
   params,
 }: {
@@ -85,53 +19,126 @@ export default function GamePage({
   const { id: deckId } = use(params);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [endSession, setEndSession] = useState(false);
+  const [isLoadingSession, setIsLoadingSession] = useState(true);
   const [game, setGame] = useState<Awaited<
     ReturnType<typeof FlashCardGame>
   > | null>(null);
+  const { mutate } = useFSRSParamsMutation(deckId);
 
-  const [sessionStats, setSessionStats] = useState({
-    total: mockCards.length,
-    completed: 0,
-    correct: 0,
-    incorrect: 0,
-  });
-  //TODO: think about logic and getting cards with the parms or not realize how to get date before indexdb make rate and test it
   useEffect(() => {
     const init = async () => {
       try {
-        const fsrsGame = await FlashCardGame(deckId); // твоя async функция
+        setIsLoadingSession(true);
+        
+        // Initialize FSRS game
+        const fsrsGame = await FlashCardGame(deckId);
         setGame(fsrsGame as any);
+        
+        // Load session from IndexedDB
+        const session = await gameStorageService.getSession(deckId);
+        if (session && session.currentCardIndex !== undefined) {
+          setCurrentCardIndex(session.currentCardIndex);
+        }
       } catch (error) {
-        console.error("Ошибка инициализации FSRS:", error);
+        console.error("Error of initialization FSRS:", error);
+      } finally {
+        setIsLoadingSession(false);
       }
     };
     init();
   }, [deckId]);
-
-  const currentCard = mockCards[currentCardIndex];
-  const handleRating = (rating: "again" | "hard" | "good" | "easy") => {
-    // Update session stats
-    const newStats = { ...sessionStats };
-    newStats.completed += 1;
-
-    if (rating === "again" || rating === "hard") {
-      newStats.incorrect += 1;
-    } else {
-      newStats.correct += 1;
-    }
-
-    setSessionStats(newStats);
-
-    if (!game) return <div>Error loading game</div>;
-
-    // Move to next card or end session
-    if (currentCardIndex < mockCards.length - 1) {
-      setCurrentCardIndex(currentCardIndex + 1);
+  const { data: cards, isLoading } = useGetGameCards(deckId);
+  
+  if (isLoading || isLoadingSession) return <div>loading</div>;
+  if (!cards || cards.length === 0) return <div>No cards available in this deck</div>;
+  if (!game) return <div>Error loading game</div>;
+  
+  // Check if session ended BEFORE bounds validation
+  // (when last card is rated, index equals cards.length which is valid for end session)
+  if (endSession) {
+    const handleRateAgain = async () => {
+      // Reset the session and start over
+      await gameStorageService.deleteSession(deckId);
+      setEndSession(false);
+      setCurrentCardIndex(0);
       setShowAnswer(false);
-    } else {
-      // Session completed
-      console.log("Session completed!", newStats);
+    };
+
+    return (
+      <div className="h-dvh flex flex-col">
+        <Stats deckId={deckId} onRateAgain={handleRateAgain} />
+      </div>
+    );
+  }
+  
+  // Validate currentCardIndex bounds (only when NOT in end session)
+  if (currentCardIndex >= cards.length) {
+    console.error(`Invalid card index: ${currentCardIndex} >= ${cards.length}`);
+    gameStorageService.deleteSession(deckId); // Clear corrupted session
+    setCurrentCardIndex(0); // Reset to start
+    return <div>Session error. Restarting...</div>;
+  }
+  
+  const currentCard = cards[currentCardIndex];
+  
+  // Safety check for currentCard
+  if (!currentCard) {
+    console.error(`Card at index ${currentCardIndex} is undefined`);
+    return <div>Error loading card</div>;
+  }
+
+  const handleRate = async (rating: Rating) => {
+    // Double-check card exists before rating
+    if (!currentCard || !currentCard.fsrsCard) {
+      console.error("Cannot rate: currentCard or fsrsCard is undefined");
+      return;
     }
+    
+    const newCardWithLog = game.rate(currentCard.fsrsCard, rating);
+
+    // Get previous session data from IndexedDB
+    const prevSession = await gameStorageService.getSession(deckId);
+
+    // Build new card data
+    const newCardData = {
+      cardId: currentCard.id,
+      card: newCardWithLog.card,
+      log: newCardWithLog.log,
+      rate: rating,
+    };
+
+    // Prepare updated cards array
+    const updatedCards = prevSession?.cards
+      ? [...prevSession.cards, newCardData]
+      : [newCardData];
+
+    const newCardIndex = currentCardIndex + 1;
+
+    // Save to IndexedDB
+    await gameStorageService.saveSession(deckId, newCardIndex, updatedCards);
+
+    // Check if this is the last card
+    if (currentCardIndex === cards.length - 1) {
+      setEndSession(true);
+
+      // Prepare DTO for server update
+      const dto = updatedCards.map(({ cardId, card, log }) => ({
+        cardId,
+        card: {
+          ...card,
+          id: cardId,
+        },
+        log,
+      }));
+      
+      mutate(dto);
+
+      return;
+    }
+    
+    setShowAnswer(false);
+    setCurrentCardIndex(newCardIndex);
   };
 
   return (
@@ -142,7 +149,7 @@ export default function GamePage({
 
       {/* Fixed Bottom Buttons */}
       <ReactButtons
-        handleRating={handleRating}
+        handleRating={handleRate}
         setShowAnswer={setShowAnswer}
         showAnswer={showAnswer}
       />

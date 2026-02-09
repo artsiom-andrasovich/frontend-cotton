@@ -46,7 +46,7 @@ export function FlashCardsSection({
               } `}
             >
               <RichEditor
-                value={card.question}
+                value={card?.question}
                 disabled={true}
                 className={`w-full h-fit border-none ${
                   !showAnswer || isOpen ? "" : "hidden"
@@ -61,7 +61,7 @@ export function FlashCardsSection({
                 )}
                 <div className="w-full">
                   <RichEditor
-                    value={card.answer}
+                    value={card?.answer}
                     disabled={true}
                     className="h-fit pb-0 border-none bg-transparent"
                   />

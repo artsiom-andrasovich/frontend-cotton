@@ -5,6 +5,7 @@ import { ErrorState } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { AppPaths } from "@/constants";
 import { useGetDeckById } from "@/hooks/";
+import { gameStorageService } from "@/services/game-storage.service";
 import { Pencil, Play, Plus } from "lucide-react";
 import Link from "next/link";
 import { use } from "react";
@@ -69,6 +70,7 @@ export default function DeckDetailPage({
           <Button
             asChild
             className="h-16 flex flex-col items-center justify-center space-y-1 bg-primary hover:bg-primary/90"
+            onClick={async () => await gameStorageService.deleteSession(deckId)}
           >
             <Link href={AppPaths.game.GAME(deckId)}>
               <Play className="w-5 h-5" />

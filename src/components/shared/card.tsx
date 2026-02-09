@@ -1,5 +1,6 @@
 import { RichEditor } from "@/app/(dashboard)/decks/[id]/(forms)/rich-editor";
 import { AppPaths } from "@/constants";
+import { cn } from "@/lib/utils";
 import { TCard } from "@/services/types";
 import { Eye, Pencil } from "lucide-react";
 import Link from "next/link";
@@ -7,10 +8,11 @@ import { ComponentProps, useState } from "react";
 import { CardPreviewModal } from "./card-preview";
 //TODO: lazy modal
 type CardProps = {
-  card: TCard;
+  card: Omit<TCard, "last_review_display"> & { last_review_display?: string };
   deckId: string;
+  className?: string;
 } & ComponentProps<"div">;
-export function Card({ deckId, card, ...props }: CardProps) {
+export function Card({ deckId, className, card, ...props }: CardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const cardDifficulty = (difficulty: number) => {
     if (difficulty >= 1 && difficulty <= 4) return "easy";
@@ -19,13 +21,19 @@ export function Card({ deckId, card, ...props }: CardProps) {
     if (difficulty > 7 && difficulty <= 10) return "hard";
     return "hard";
   };
+  console.log("card");
+  console.log(card);
+  console.log("okk");
 
   const cardDiff = cardDifficulty(card.fsrsCard.difficulty);
 
   return (
     <div
       {...props}
-      className="bg-white  dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors cursor-pointer"
+      className={cn(
+        "bg-white  dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors cursor-pointer",
+        className
+      )}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
@@ -59,7 +67,9 @@ export function Card({ deckId, card, ...props }: CardProps) {
                 {cardDiff}
               </span>
               <span className="text-xs text-gray-500 dark:text-gray-400">
-                Last reviewed: {card.last_review_display}
+                {card.last_review_display 
+                  ? `Last reviewed: ${card.last_review_display}` 
+                  : 'Not reviewed yet'}
               </span>
             </div>
             <div className="flex gap-2 ">

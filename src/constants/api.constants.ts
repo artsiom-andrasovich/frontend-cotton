@@ -36,7 +36,8 @@ export const ApiPaths = {
   },
   fsrs: {
     GAME_PARAMS: (deckId: string) => `/fsrs/game-params/${deckId}`,
-    GAME_CARDS: (deckId: string) => `fsrs/game-cards/${deckId}`,
+    GAME_CARDS: (deckId: string) => `/fsrs/game-cards/${deckId}`,
+    UPDATE_FSRS_CARDS_PARAMS: `/fsrs/update-fsrs-cards-params`,
   },
   //reset-password
 } as const;

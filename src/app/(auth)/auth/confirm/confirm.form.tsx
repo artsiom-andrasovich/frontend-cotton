@@ -24,6 +24,7 @@ export function ConfirmForm({ userId, email }: ConfirmFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  // TODO: change on react query
   useEffect(() => {
     if (otp.length === 6) {
       confirmCode();
