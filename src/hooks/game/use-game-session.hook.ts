@@ -4,6 +4,7 @@ import { FlashCardGame } from "@/logic/fsrs";
 import { gameStorageService } from "@/services/game-storage.service";
 import { useEffect, useState } from "react";
 import { Rating } from "ts-fsrs";
+import { useStudyTimer } from "./use-study-timer.hook";
 
 export function useGameSession(deckId: string) {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -13,6 +14,7 @@ export function useGameSession(deckId: string) {
   const [game, setGame] = useState<Awaited<
     ReturnType<typeof FlashCardGame>
   > | null>(null);
+  const timer = useStudyTimer();
   const { mutate } = useFSRSParamsMutation(deckId);
   const { data: cards, isLoading: isLoadingCards } = useGetGameCards(deckId);
 
@@ -38,6 +40,14 @@ export function useGameSession(deckId: string) {
   }, [deckId]);
 
   const isLoading = isLoadingCards || isLoadingSession;
+
+  useEffect(() => {
+    if (!isLoading) return;
+    timer.start();
+    return () => {
+      timer.pause();
+    };
+  }, [isLoading]);
 
   // Validate currentCardIndex bounds (only when NOT in end session)
   const isInvalidIndex =
@@ -73,18 +83,20 @@ export function useGameSession(deckId: string) {
 
     const newCardIndex = currentCardIndex + 1;
 
-    await gameStorageService.saveSession(deckId, newCardIndex, updatedCards);
+    await gameStorageService.saveSession(deckId, newCardIndex, updatedCards, timer.activeTimeMs);
 
     if (currentCardIndex === cards.length - 1) {
+      timer.pause();
       setEndSession(true);
 
-      const dto = updatedCards.map(({ cardId, card, log }) => ({
+      const dto = updatedCards.map(({ cardId, card, log}) => ({
         cardId,
         card: { ...card, id: cardId },
         log,
       }));
 
-      mutate(dto);
+      mutate({cards: dto, sessionTimeMs: timer.activeTimeMs});
+      timer.reset();
       return;
     }
 
@@ -94,6 +106,8 @@ export function useGameSession(deckId: string) {
 
   const handleRateAgain = async () => {
     await gameStorageService.deleteSession(deckId);
+    timer.reset();
+    timer.start();
     setEndSession(false);
     setCurrentCardIndex(0);
     setShowAnswer(false);

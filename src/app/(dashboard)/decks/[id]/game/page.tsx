@@ -6,7 +6,7 @@ import { use } from "react";
 import { Stats } from "./(stats)/stats";
 import { FlashCardsSection } from "./flash-cards-section";
 import { ReactButtons } from "./react-buttons";
-
+  
 export default function GamePage({
   params,
 }: {
@@ -30,6 +30,7 @@ export default function GamePage({
   if (!cards || cards.length === 0)
     return <div>No cards available in this deck</div>;
   if (!game) return <div>Error loading game</div>;
+  // const {activeTimeMs, isRunning, start, pause, reset} = useStudyTimer()
 
   if (endSession) {
     return (

@@ -15,7 +15,7 @@ export type GameSession = {
   deckId: string;
   currentCardIndex: number;
   cards: GameSessionCard[];
-  updatedAt: number;
+  sessionTimeMs: number;
 };
 
 class GameStorageService {
@@ -50,7 +50,7 @@ class GameStorageService {
           });
           // Create index for faster queries by deck ID
           objectStore.createIndex("deckId", "deckId", { unique: true });
-          objectStore.createIndex("updatedAt", "updatedAt", { unique: false });
+          objectStore.createIndex("sessionTimeMs", "sessionTimeMs", { unique: false });
         }
       };
     });
@@ -88,7 +88,8 @@ class GameStorageService {
   async saveSession(
     deckId: string,
     currentCardIndex: number,
-    cards: GameSessionCard[]
+    cards: GameSessionCard[],
+    sessionTimeMs: number,
   ): Promise<void> {
     try {
       const db = await this.initDB();
@@ -99,7 +100,7 @@ class GameStorageService {
         deckId,
         currentCardIndex,
         cards,
-        updatedAt: Date.now(),
+        sessionTimeMs,
       };
 
       const request = store.put(session);
