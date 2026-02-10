@@ -1,6 +1,6 @@
 import { Rating } from "ts-fsrs";
-import { TStatsData } from "./stats";
 import { getRatingColor, getRatingIcon } from "./style.util";
+import { TStatsData } from "./use-session-stats.hook";
 
 type BarChartProps = {
   stats: TStatsData;

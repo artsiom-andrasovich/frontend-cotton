@@ -3,10 +3,14 @@ import { AppPaths } from "@/constants";
 import { cn } from "@/lib/utils";
 import { TCard } from "@/services/types";
 import { Eye, Pencil } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ComponentProps, useState } from "react";
-import { CardPreviewModal } from "./card-preview";
-//TODO: lazy modal
+
+const CardPreviewModal = dynamic(
+  () => import("./card-preview").then((m) => ({ default: m.CardPreviewModal })),
+  { ssr: false }
+);
 type CardProps = {
   card: Omit<TCard, "last_review_display"> & { last_review_display?: string };
   deckId: string;
@@ -21,9 +25,6 @@ export function Card({ deckId, className, card, ...props }: CardProps) {
     if (difficulty > 7 && difficulty <= 10) return "hard";
     return "hard";
   };
-  console.log("card");
-  console.log(card);
-  console.log("okk");
 
   const cardDiff = cardDifficulty(card.fsrsCard.difficulty);
 

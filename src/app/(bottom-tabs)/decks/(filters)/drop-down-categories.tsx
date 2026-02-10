@@ -9,7 +9,6 @@ export const DropDownCategories = ({
   selectedCategories,
   ref,
 }: Omit<TCategoryProps, "isLoadingCategories"> & ComponentProps<"div">) => {
-  //TODO: no categories if no desc like
   return (
     <div
       ref={ref}

@@ -1,4 +1,4 @@
-import { TStatsData } from "./stats";
+import { TStatsData } from "./use-session-stats.hook";
 
 export function StatsHeader({ stats }: { stats: TStatsData }) {
   return (
