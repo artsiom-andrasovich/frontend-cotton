@@ -22,8 +22,11 @@ export const AppPaths = {
     PROFILE: "/profile",
   },
   settings: {
-    SETTINGS: "/settings",
+    SETTINGS: "/profile/settings",
   },
+  explore:{
+    EXPLORE:'/explore'
+  }
 } as const;
 
 export type TAppPaths = (typeof AppPaths)[keyof typeof AppPaths];

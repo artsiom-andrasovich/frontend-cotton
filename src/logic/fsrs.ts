@@ -27,7 +27,6 @@ export class FSRSCardGame {
     this.cardsPerSession = cardsPerSession;
     this.fsrs = new FSRS({ ...params, enable_fuzz: true });
   }
-
   rate(card: Card, rating: Rating) {
     const newCardWithLog = this.fsrs.next(
       card,

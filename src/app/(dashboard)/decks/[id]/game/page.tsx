@@ -2,17 +2,20 @@
 
 import { Navbar } from "@/components/shared";
 import { useGameSession } from "@/hooks/game/use-game-session.hook";
-import { use } from "react";
+import { useRouter } from "next/navigation";
+import { use, useEffect } from "react";
+import toast from "react-hot-toast";
 import { Stats } from "./(stats)/stats";
 import { FlashCardsSection } from "./flash-cards-section";
 import { ReactButtons } from "./react-buttons";
-  
+
 export default function GamePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id: deckId } = use(params);
+  const router = useRouter();
   const {
     currentCard,
     cards,
@@ -26,9 +29,15 @@ export default function GamePage({
     handleRateAgain,
   } = useGameSession(deckId);
 
+  useEffect(() => {
+    if (!isLoading && (!cards || cards.length === 0)) {
+      toast.error("This deck has no cards to study");
+      router.push(`/decks/${deckId}`);
+    }
+  }, [cards, deckId, isLoading, router]);
+
   if (isLoading) return <div>loading</div>;
-  if (!cards || cards.length === 0)
-    return <div>No cards available in this deck</div>;
+  if (!cards || cards.length === 0) return null; // Prevent flash before redirect
   if (!game) return <div>Error loading game</div>;
   // const {activeTimeMs, isRunning, start, pause, reset} = useStudyTimer()
 

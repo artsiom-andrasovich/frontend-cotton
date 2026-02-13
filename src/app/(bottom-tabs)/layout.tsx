@@ -2,7 +2,7 @@
 
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AppPaths } from "@/constants";
-import { BookOpen, Home, Settings, User } from "lucide-react";
+import { Atom, BookOpen, Home, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -22,16 +22,17 @@ const navigationItems = [
     href: AppPaths.deck.DECKS,
     icon: BookOpen,
   },
+    {
+    name: "Explore",
+    href: AppPaths.explore.EXPLORE,
+    icon: Atom,
+  },
   {
     name: "Profile",
     href: AppPaths.profile.PROFILE,
     icon: User,
   },
-  {
-    name: "Settings",
-    href: AppPaths.settings.SETTINGS,
-    icon: Settings,
-  },
+
 ];
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -54,9 +55,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
           <div className="flex items-center space-x-2">
             <ThemeToggle />
-            <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-              <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-            </button>
           </div>
         </div>
       </header>

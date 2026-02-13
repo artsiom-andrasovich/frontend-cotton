@@ -51,7 +51,11 @@ export function useGameSession(deckId: string) {
 
   // Validate currentCardIndex bounds (only when NOT in end session)
   const isInvalidIndex =
-    !isLoading && cards && !endSession && currentCardIndex >= cards.length;
+    !isLoading &&
+    cards &&
+    cards.length > 0 &&
+    !endSession &&
+    currentCardIndex >= cards.length;
 
   if (isInvalidIndex) {
     gameStorageService.deleteSession(deckId);
@@ -83,19 +87,24 @@ export function useGameSession(deckId: string) {
 
     const newCardIndex = currentCardIndex + 1;
 
-    await gameStorageService.saveSession(deckId, newCardIndex, updatedCards, timer.activeTimeMs);
+    await gameStorageService.saveSession(
+      deckId,
+      newCardIndex,
+      updatedCards,
+      timer.activeTimeMs,
+    );
 
     if (currentCardIndex === cards.length - 1) {
       timer.pause();
       setEndSession(true);
 
-      const dto = updatedCards.map(({ cardId, card, log}) => ({
+      const dto = updatedCards.map(({ cardId, card, log }) => ({
         cardId,
         card: { ...card, id: cardId },
         log,
       }));
 
-      mutate({cards: dto, sessionTimeMs: timer.activeTimeMs});
+      mutate({ cards: dto, sessionTimeMs: timer.activeTimeMs });
       timer.reset();
       return;
     }

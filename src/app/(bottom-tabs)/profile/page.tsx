@@ -1,7 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { BookOpen, Clock, LogOut, TrendingUp } from "lucide-react";
+import { AppPaths } from "@/constants/app.paths";
+import { BookOpen, Clock, LogOut, Settings, TrendingUp } from "lucide-react";
+import Link from "next/link";
 import { ProfileHeader } from "./profile-header";
 
 export default function ProfilePage() {
@@ -98,10 +100,12 @@ export default function ProfilePage() {
 
       {/* Actions */}
       <div className="space-y-3">
-        {/* <Button variant="outline" className="w-full justify-start">
-          <Settings className="w-4 h-4 mr-3" />
-          Account Settings
-        </Button> */}
+          <Button variant="outline" className="w-full justify-start" asChild>
+        <Link href={AppPaths.settings.SETTINGS}>
+            <Settings className="w-4 h-4 mr-3" />
+            Account Settings
+        </Link>
+          </Button>
 
         {/*TODO: */}
         <Button

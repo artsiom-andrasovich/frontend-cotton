@@ -8,7 +8,7 @@ export const deckService = {
   async getDecks(
     limit: number,
     cursor?: TDeckCursor | null,
-    filters?: string
+    filters?: string,
   ): Promise<TListDecks> {
     const params: Record<string, any> = {
       limit,
@@ -42,9 +42,7 @@ export const deckService = {
     return res.data;
   },
   async getDeckById(deckId: string): Promise<AxiosResponse<TDeck>> {
-    const res = await axiosWithAuth.get(
-      ApiPaths.deck.GET_DECK_BY_ID + `/${deckId}`
-    );
+    const res = await axiosWithAuth.get(ApiPaths.deck.GET_DECK_BY_ID(deckId));
     return res;
   },
   async createDeck(data: DeckFormData): Promise<AxiosResponse<string>> {
@@ -53,6 +51,10 @@ export const deckService = {
   },
   async updateDeck(dto: TUpdateDeckDto) {
     const res = await axiosWithAuth.patch(ApiPaths.deck.UPDATE_DECK, dto);
+    return res;
+  },
+  async deleteDeck(deckId: string) {
+    const res = await axiosWithAuth.delete(ApiPaths.deck.DELETE_DECK(deckId));
     return res;
   },
 };

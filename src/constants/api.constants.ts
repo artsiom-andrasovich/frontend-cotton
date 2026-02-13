@@ -21,9 +21,9 @@ export const ApiPaths = {
   deck: {
     CREATE_DECK: "/deck/create-deck",
     UPDATE_DECK: "/deck/update-deck",
-    DELETE_DECK: "/deck/delete-deck",
+    DELETE_DECK: (deckId: string) => `/deck/delete-deck/${deckId}`,
     LIST_DECKS: "/deck/list-user-decks",
-    GET_DECK_BY_ID: "/deck/get-deck",
+    GET_DECK_BY_ID: (deckId: string) => `/deck/get-deck/${deckId}`,
   },
   categories: {
     LIST_USER_CATEGORIES: "/categories/list-user-categories",

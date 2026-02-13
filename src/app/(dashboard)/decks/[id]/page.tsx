@@ -2,15 +2,13 @@
 
 import { Navbar } from "@/components/shared";
 import { ErrorState } from "@/components/ui";
-import { Button } from "@/components/ui/button";
 import { AppPaths } from "@/constants";
 import { useGetDeckById } from "@/hooks/";
-import { gameStorageService } from "@/services/game-storage.service";
-import { Pencil, Play, Plus } from "lucide-react";
-import Link from "next/link";
 import { use } from "react";
 import { CardsSection } from "./cards-section";
+import { DeckActions } from "./deck-actions";
 import { DeckInfo } from "./deck-info";
+import { DeckOptions } from "./deck-options";
 import { DeckStats } from "./stats";
 
 export default function DeckDetailPage({
@@ -45,11 +43,7 @@ export default function DeckDetailPage({
   return (
     <>
       <Navbar title={deck.name} path={AppPaths.deck.DECKS}>
-        <Button variant="outline" size="sm">
-          <Link href={AppPaths.deck.DECK + `?deckId=${deckId}`}>
-            <Pencil className="w-4 h-4 " />
-          </Link>
-        </Button>
+        <DeckOptions deckId={deckId} />
       </Navbar>
       <div className="p-4 space-y-6">
         {/* Description */}
@@ -66,29 +60,7 @@ export default function DeckDetailPage({
           lastStudied={deck.lastStudied}
         />
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-3">
-          <Button
-            asChild
-            className="h-16 flex flex-col items-center justify-center space-y-1 bg-primary hover:bg-primary/90"
-            onClick={async () => await gameStorageService.deleteSession(deckId)}
-          >
-            <Link href={AppPaths.game.GAME(deckId)}>
-              <Play className="w-5 h-5" />
-              <span className="text-sm">Study Now</span>
-            </Link>
-          </Button>
-
-          <Button
-            asChild
-            variant="outline"
-            className="h-16 flex flex-col items-center justify-center space-y-1"
-          >
-            <Link href={AppPaths.card.CARD(deckId)}>
-              <Plus className="w-5 h-5" />
-              <span className="text-sm">Add Cards</span>
-            </Link>
-          </Button>
-        </div>
+        <DeckActions deckId={deckId} cardCount={deck.cardCount} />
 
         {/* Cards List */}
 
