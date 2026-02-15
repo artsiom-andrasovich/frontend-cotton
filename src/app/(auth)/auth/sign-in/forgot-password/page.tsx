@@ -10,37 +10,45 @@ export default function ForgotPasswordPage() {
   const [step, setStep] = useState<TStep>("email");
 
   type TData = {
-    email: string | undefined;
+    usernameOrEmail: string | undefined;
     code: string | undefined;
+    userId: string | undefined;
   };
   const [data, setData] = useState<TData>({
     code: undefined,
-    email: undefined,
+    usernameOrEmail: undefined,
+    userId: undefined,
   });
-  const handleSubmit = (val: string) => {
-    if (step === "email") {
-      setData((prev) => ({
-        ...prev,
-        email: val,
-      }));
-      setStep("otp");
-    } else if (step === "otp") {
-      setData((prev) => ({
-        ...prev,
-        code: val,
-      }));
-      setStep("change-password");
-    }
+
+  const handleEmailSubmit = (val: string) => {
+    setData((prev) => ({
+      ...prev,
+      usernameOrEmail: val,
+    }));
+    setStep("otp");
   };
+
+  const handleOtpSubmit = (code: string, userId: string) => {
+    setData((prev) => ({
+      ...prev,
+      code,
+      userId,
+    }));
+    setStep("change-password");
+  };
+
   const Components: Record<TStep, JSX.Element> = {
-    email: <EmailForm onEmailSubmitted={handleSubmit} />,
+    email: <EmailForm onEmailSubmitted={handleEmailSubmit} />,
     otp: (
-      <OTPForm onCodeSubmitted={handleSubmit} email={data.email as string} />
+      <OTPForm
+        onCodeSubmitted={handleOtpSubmit}
+        usernameOrEmail={data.usernameOrEmail as string}
+      />
     ),
     "change-password": (
       <ChangePasswordForm
         code={data.code as string}
-        email={data.email as string}
+        userId={data.userId as string}
       />
     ),
   };

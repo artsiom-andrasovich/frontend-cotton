@@ -9,4 +9,15 @@ export const userService = {
 
     return res;
   },
+
+  async changeUserData(data: {
+    username?: string;
+    email?: string;
+  }): Promise<AxiosResponse<TUserProfile>> {
+    const res = await axiosWithAuth.patch<TUserProfile>(
+      ApiPaths.user.CHANGE_USER_DATA,
+      data,
+    );
+    return res;
+  },
 };

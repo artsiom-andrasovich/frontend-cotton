@@ -61,7 +61,7 @@ export function ConfirmForm({ userId, email }: ConfirmFormProps) {
   const isLoading = confirmMutation.isPending || resendMutation.isPending;
 
   return (
-    <div className="w-full max-w-sm mx-auto space-y-6">
+    <div className="w-full max-w-sm mx-auto space-y-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-md">
       <div className="text-center space-y-2">
         <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
           <Mail className="w-6 h-6 text-primary" />
@@ -127,4 +127,3 @@ export function ConfirmForm({ userId, email }: ConfirmFormProps) {
     </div>
   );
 }
-

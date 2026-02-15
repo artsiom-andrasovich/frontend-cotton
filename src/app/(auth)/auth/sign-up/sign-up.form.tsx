@@ -33,7 +33,7 @@ export function SignUpForm() {
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       email: "",
-      name: "",
+      username: "",
       password: "",
       passwordRepeat: "",
     },
@@ -72,17 +72,17 @@ export function SignUpForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="name"
+            name="username"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-gray-900 dark:text-white">
-                  Name
+                  Username
                 </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     type="text"
-                    placeholder="Enter your name"
+                    placeholder="Enter your username"
                     disabled={signUpMutation.isPending}
                     className="h-12 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700"
                   />
@@ -223,4 +223,3 @@ export function SignUpForm() {
     </div>
   );
 }
-

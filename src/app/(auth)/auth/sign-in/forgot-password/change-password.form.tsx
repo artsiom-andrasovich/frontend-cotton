@@ -27,7 +27,7 @@ const passwordResetSchema = z
       .min(8, "Password must be at least 8 characters")
       .regex(
         passwordComplexity,
-        "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
       ),
     passwordRepeat: z.string(),
   })
@@ -40,10 +40,10 @@ type PasswordResetFormData = z.infer<typeof passwordResetSchema>;
 
 type ChangePasswordFormProps = {
   code: string;
-  email: string;
+  userId: string;
 };
 
-export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
+export function ChangePasswordForm({ code, userId }: ChangePasswordFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const { push } = useRouter();
 
@@ -59,7 +59,7 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
     mutationFn: (data: PasswordResetFormData) =>
       resetPasswordService.resetPasswordByCode({
         code,
-        email,
+        userId,
         ...data,
       }),
     onSuccess: () => {
@@ -76,7 +76,7 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto space-y-6">
+    <div className="w-full max-w-sm mx-auto space-y-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-md">
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold tracking-tight">Reset password</h1>
         <p className="text-sm text-muted-foreground">Enter your new password</p>
@@ -168,4 +168,3 @@ export function ChangePasswordForm({ code, email }: ChangePasswordFormProps) {
     </div>
   );
 }
-

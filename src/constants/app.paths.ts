@@ -10,6 +10,7 @@ export const AppPaths = {
   deck: {
     DECKS: "/decks",
     DECK: "/deck",
+    GET_DECK: (id: string) => `/decks/${id}`,
   },
   card: {
     CARD: (deckId: string) => `/decks/${deckId}/card`,
@@ -23,10 +24,15 @@ export const AppPaths = {
   },
   settings: {
     SETTINGS: "/profile/settings",
+    PROFILE: "/profile/settings/profile",
+    APP: "/profile/settings/app",
+    SECURITY: "/profile/settings/security",
+    NOTIFICATIONS: "/profile/settings/notifications",
+    ABOUT: "/profile/settings/about",
   },
-  explore:{
-    EXPLORE:'/explore'
-  }
+  explore: {
+    EXPLORE: "/explore",
+  },
 } as const;
 
 export type TAppPaths = (typeof AppPaths)[keyof typeof AppPaths];

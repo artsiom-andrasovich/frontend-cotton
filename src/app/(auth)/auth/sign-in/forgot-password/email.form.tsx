@@ -20,14 +20,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const EmailSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
+const UsernameOrEmailSchema = z.object({
+  usernameOrEmail: z.string().min(1, { message: "Value is required" }),
 });
 
-type TEmailForm = z.infer<typeof EmailSchema>;
+type TEmailForm = z.infer<typeof UsernameOrEmailSchema>;
 
 interface EmailFormProps {
-  onEmailSubmitted: (email: string) => void;
+  onEmailSubmitted: (usernameOrEmail: string) => void;
 }
 
 export function EmailForm({ onEmailSubmitted }: EmailFormProps) {
@@ -35,8 +35,8 @@ export function EmailForm({ onEmailSubmitted }: EmailFormProps) {
   const [error, setError] = useState("");
 
   const form = useForm<TEmailForm>({
-    resolver: zodResolver(EmailSchema),
-    defaultValues: { email: "" },
+    resolver: zodResolver(UsernameOrEmailSchema),
+    defaultValues: { usernameOrEmail: "" },
   });
 
   const handleEmailSubmit = async (data: TEmailForm) => {
@@ -44,13 +44,13 @@ export function EmailForm({ onEmailSubmitted }: EmailFormProps) {
       setIsLoading(true);
       setError("");
 
-      console.log("Requesting password reset for:", data.email);
+      console.log("Requesting password reset for:", data.usernameOrEmail);
 
-      await resetPasswordService.getResetPasswordCode(data.email);
+      await resetPasswordService.getResetPasswordCode(data.usernameOrEmail);
       const { toast } = await import("react-hot-toast");
       toast.success("Verification code sent to your email");
 
-      onEmailSubmitted(data.email);
+      onEmailSubmitted(data.usernameOrEmail);
     } catch (err) {
       setError(errorCatch(err));
     } finally {
@@ -59,11 +59,12 @@ export function EmailForm({ onEmailSubmitted }: EmailFormProps) {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto space-y-6">
+    <div className="w-full max-w-sm mx-auto space-y-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-md">
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold tracking-tight">Forgot password</h1>
         <p className="text-sm text-muted-foreground">
-          Enter your email address and we&apos;ll send you a verification code
+          Enter your email or username and we&apos;ll send you a verification
+          code
         </p>
       </div>
 
@@ -74,15 +75,15 @@ export function EmailForm({ onEmailSubmitted }: EmailFormProps) {
         >
           <FormField
             control={form.control}
-            name="email"
+            name="usernameOrEmail"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Email or Username</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    type="email"
-                    placeholder="Enter your email"
+                    type="text"
+                    placeholder="Enter your email or username"
                     disabled={isLoading}
                     className="h-12"
                   />

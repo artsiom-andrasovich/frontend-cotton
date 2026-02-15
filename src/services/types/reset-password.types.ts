@@ -1,10 +1,15 @@
 export type TVerifyCodeDto = {
-  email: string;
+  usernameOrEmail: string;
+  code: string;
+};
+
+export type TVerifyCodeResponse = {
+  userId: string;
   code: string;
 };
 
 export type TResetPasswordByCode = {
-  email: string;
+  userId: string;
   code: string;
   password: string;
   passwordRepeat: string;

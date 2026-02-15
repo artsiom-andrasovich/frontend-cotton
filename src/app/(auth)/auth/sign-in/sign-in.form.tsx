@@ -32,7 +32,7 @@ export function SignInForm() {
   const form = useForm<TSignInForm>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
-      email: "",
+      login: "",
       password: "",
     },
   });
@@ -66,17 +66,17 @@ export function SignInForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="email"
+            name="login"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-gray-900 dark:text-white">
-                  Email
+                  Email or Username
                 </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    type="email"
-                    placeholder="Enter your email"
+                    type="text"
+                    placeholder="Enter your email or username"
                     disabled={signInMutation.isPending}
                     className="h-12 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700"
                   />
@@ -183,4 +183,3 @@ export function SignInForm() {
     </div>
   );
 }
-

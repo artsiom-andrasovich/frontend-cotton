@@ -1,23 +1,29 @@
 import { axiosClassic } from "@/api/interceptors";
 import { ApiPaths } from "@/constants";
-import type { TResetPasswordByCode, TVerifyCodeDto } from "./types";
+import type {
+  TResetPasswordByCode,
+  TVerifyCodeDto,
+  TVerifyCodeResponse,
+} from "./types";
 
 export const resetPasswordService = {
-  async getResetPasswordCode(email: string) {
+  async getResetPasswordCode(usernameOrEmail: string) {
     await axiosClassic.get(
-      ApiPaths.reset_password.GET_RESET_PASSWORD_CODE + `/${email}`
+      ApiPaths.reset_password.GET_RESET_PASSWORD_CODE + `/${usernameOrEmail}`,
     );
   },
   async verifyCode(dto: TVerifyCodeDto) {
-    console.log(dto);
-
-    await axiosClassic.post(
+    const { data } = await axiosClassic.post<TVerifyCodeResponse>(
       ApiPaths.reset_password.VERIFY_RESET_PASSWORD_CODE,
-      dto
+      dto,
     );
+    return data;
   },
   async resetPasswordByCode(dto: TResetPasswordByCode) {
-    await axiosClassic.put(ApiPaths.reset_password.RESET_PASSWORD_BY_CODE, dto);
+    await axiosClassic.patch(
+      ApiPaths.reset_password.RESET_PASSWORD_BY_CODE,
+      dto,
+    );
   },
   async resetPassword() {},
 };

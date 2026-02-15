@@ -14,11 +14,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface OTPFormProps {
-  email: string;
-  onCodeSubmitted: (code: string) => void;
+  usernameOrEmail: string;
+  onCodeSubmitted: (code: string, userId: string) => void;
 }
 
-export function OTPForm({ email, onCodeSubmitted }: OTPFormProps) {
+export function OTPForm({ usernameOrEmail, onCodeSubmitted }: OTPFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [otp, setOtp] = useState("");
@@ -28,21 +28,23 @@ export function OTPForm({ email, onCodeSubmitted }: OTPFormProps) {
     if (otp.length === 6 && !isLoading) {
       handleOTPSubmit();
     }
-  }, [otp, isLoading, error]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [otp, isLoading]);
 
   const handleOTPSubmit = async () => {
     try {
       setIsLoading(true);
       setError("");
 
-      await resetPasswordService.verifyCode({
-        email,
+      const response = await resetPasswordService.verifyCode({
+        usernameOrEmail: usernameOrEmail,
         code: otp,
       });
 
       const { toast } = await import("react-hot-toast");
       toast.success("Code verified successfully");
-      onCodeSubmitted(otp);
+      // Pass both the code and the userId returned from verification
+      onCodeSubmitted(otp, response.userId);
     } catch (err) {
       setError(errorCatch(err));
       setOtp("");
@@ -52,14 +54,14 @@ export function OTPForm({ email, onCodeSubmitted }: OTPFormProps) {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto space-y-6">
+    <div className="w-full max-w-sm mx-auto space-y-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-md">
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold tracking-tight">
           Enter verification code
         </h1>
         <p className="text-sm text-muted-foreground">
           We&apos;ve sent a 6-digit code to{" "}
-          <span className="font-medium">{email}</span>
+          <span className="font-medium">{usernameOrEmail}</span>
         </p>
       </div>
 
@@ -107,7 +109,7 @@ export function OTPForm({ email, onCodeSubmitted }: OTPFormProps) {
           <button
             type="button"
             onClick={async () => {
-              await resetPasswordService.getResetPasswordCode(email);
+              await resetPasswordService.getResetPasswordCode(usernameOrEmail);
             }}
             className="text-primary hover:underline font-medium"
             disabled={isLoading}

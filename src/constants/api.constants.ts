@@ -11,12 +11,13 @@ export const ApiPaths = {
   },
   reset_password: {
     GET_RESET_PASSWORD_CODE: "/user/get-reset-password-code",
-    VERIFY_RESET_PASSWORD_CODE: "/user/reset-password-by-code/isValid",
-    RESET_PASSWORD_BY_CODE: "/user/change-password-by-code",
+    VERIFY_RESET_PASSWORD_CODE: "/user/reset-password-by-code/is-valid",
+    RESET_PASSWORD_BY_CODE: "/user/reset-password-by-code",
     RESET_PASSWORD: "/user/change-password",
   },
   user: {
-    ME: "/user/me",
+    ME: "/user/get-me",
+    CHANGE_USER_DATA: "/user/change-user-data",
   },
   deck: {
     CREATE_DECK: "/deck/create-deck",
@@ -38,6 +39,15 @@ export const ApiPaths = {
     GAME_PARAMS: (deckId: string) => `/fsrs/game-params/${deckId}`,
     GAME_CARDS: (deckId: string) => `/fsrs/game-cards/${deckId}`,
     UPDATE_FSRS_CARDS_PARAMS: `/fsrs/update-fsrs-cards-params`,
+  },
+  profile: {
+    UPLOAD_AVATAR: "/profile/upload-avatar",
+    DELETE_AVATAR: "/profile/delete-avatar",
+    UPDATE_PROFILE: "/profile/update-profile-data",
+    GET_PROFILE: (username: string) => `/profile/get-profile/${username}`,
+  },
+  stats: {
+    DASHBOARD: "/stats/dashboard",
   },
   //reset-password
 } as const;

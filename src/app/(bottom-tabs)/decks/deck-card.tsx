@@ -1,6 +1,6 @@
 import { CategoryIcon } from "@/components/shared";
 import { Button } from "@/components/ui/button";
-import { colorMapDeckCard as colorMap } from "@/constants";
+import { AppPaths, colorMapDeckCard as colorMap } from "@/constants";
 import type { TDeck } from "@/services/types";
 import { Play } from "lucide-react";
 import Link from "next/link";
@@ -27,7 +27,7 @@ export const DeckCard = ({ deck, ...props }: DeckCardProps) => {
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <Link href={`/decks/${deck.id}`} className="block">
+          <Link href={AppPaths.deck.GET_DECK(deck.id)} className="block">
             <div className="flex items-center space-x-3 mb-2">
               <div
                 className={`w-10 h-10 ${colorClasses.iconBg} rounded-lg flex items-center justify-center shadow-sm`}

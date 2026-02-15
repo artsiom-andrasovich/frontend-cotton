@@ -100,12 +100,12 @@ export default function ProfilePage() {
 
       {/* Actions */}
       <div className="space-y-3">
-          <Button variant="outline" className="w-full justify-start" asChild>
-        <Link href={AppPaths.settings.SETTINGS}>
+        <Button variant="outline" className="w-full justify-start" asChild>
+          <Link href={AppPaths.settings.SETTINGS}>
             <Settings className="w-4 h-4 mr-3" />
             Account Settings
-        </Link>
-          </Button>
+          </Link>
+        </Button>
 
         {/*TODO: */}
         <Button
