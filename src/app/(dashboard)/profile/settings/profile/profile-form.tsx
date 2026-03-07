@@ -10,10 +10,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AppPaths } from "@/constants";
 import { useProfile } from "@/hooks/use-profile.hook";
 import { userService } from "@/services/user.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { ProfileFormValues, profileFormSchema } from "./profile-form.schema";
@@ -21,6 +23,7 @@ import { ProfileFormValues, profileFormSchema } from "./profile-form.schema";
 export function ProfileForm() {
   const { profile, updateProfile, isUpdatingProfile } = useProfile();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -62,22 +65,28 @@ export function ProfileForm() {
   );
 
   const onSubmit = async (data: ProfileFormValues) => {
-    // 1. Update Profile (First/Last Name)
-    if (
-      data.firstName !== profile?.firstName ||
-      data.lastName !== profile?.lastName
-    ) {
-      updateProfile({
-        firstName: data.firstName,
-        lastName: data.lastName,
-      });
-    }
+    try {
+      // 1. Update Profile (First/Last Name)
+      if (
+        data.firstName !== profile?.firstName ||
+        data.lastName !== profile?.lastName
+      ) {
+        updateProfile({
+          firstName: data.firstName,
+          lastName: data.lastName,
+        });
+      }
 
-    // 2. Update User Data (Username/Email)
-    // Check if username/email changed.
-    if (data.username !== profile?.username || data.email !== profile?.email) {
-      updateUserData({ username: data.username, email: data.email });
-    }
+      // 2. Update User Data (Username/Email)
+      // Check if username/email changed.
+      if (
+        data.username !== profile?.username ||
+        data.email !== profile?.email
+      ) {
+        updateUserData({ username: data.username, email: data.email });
+      }
+      router.push(AppPaths.profile.PROFILE);
+    } catch (e) {}
   };
 
   return (

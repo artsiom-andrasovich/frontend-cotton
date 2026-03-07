@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cotton",
-  description: "Cotton - Your Flashcard Learning App",
+  title: "late-owl",
+  description: "late-owl - Your Flashcard Learning App",
   manifest: "/manifest.json",
 };
 

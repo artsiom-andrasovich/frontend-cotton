@@ -1,14 +1,22 @@
 import { axiosWithAuth } from "@/api/interceptors";
 import { ApiPaths } from "@/constants/api.constants";
-import { DashboardStatsResponse } from "@/services/types";
+import {
+  type DashboardStatsResponse,
+  type TProfileStats,
+} from "@/services/types";
 
-class StatsService {
+export const statsService = {
   async getDashboardStats() {
     const { data } = await axiosWithAuth.get<DashboardStatsResponse>(
       ApiPaths.stats.DASHBOARD,
     );
     return data;
-  }
-}
+  },
 
-export const statsService = new StatsService();
+  async getProfileStats() {
+    const { data } = await axiosWithAuth.get<TProfileStats>(
+      ApiPaths.stats.PROFILE,
+    );
+    return data;
+  },
+};

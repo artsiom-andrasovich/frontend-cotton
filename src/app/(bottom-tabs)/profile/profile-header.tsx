@@ -4,6 +4,7 @@ import { AppPaths } from "@/constants";
 import { useProfile } from "@/hooks/use-profile.hook";
 import { formatDistanceToNow } from "date-fns";
 import { Pencil } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 //TODO: logic of return to the profile if pencil was clicked
 export function ProfileHeader() {
@@ -47,9 +48,12 @@ export function ProfileHeader() {
         {/* Avatar Section */}
         <div className="w-16 h-16 overflow-hidden rounded-full ring-2 ring-border">
           {profile?.avatarUrl ? (
-            <img
+            <Image
               src={profile.avatarUrl}
               alt="Avatar"
+              width={64}
+              height={64}
+              unoptimized
               className="object-cover w-full h-full"
             />
           ) : (

@@ -48,6 +48,7 @@ export const ApiPaths = {
   },
   stats: {
     DASHBOARD: "/stats/dashboard",
+    PROFILE: "/stats/profile",
   },
   //reset-password
 } as const;

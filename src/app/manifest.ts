@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Cotton",
-    short_name: "Cotton",
-    description: "Cotton - Your Flashcard Learning App",
+    name: "late-owl",
+    short_name: "late-owl",
+    description: "late-owl - Your Flashcard Learning App",
     start_url: "/auth/sign-in",
     display: "standalone",
     display_override: ["standalone"],

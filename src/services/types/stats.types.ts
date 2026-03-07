@@ -12,3 +12,13 @@ export type DashboardStatsResponse = {
   studyTimeHours: number;
   recentActivity: RecentActivityItem[];
 };
+
+type TStats = {
+  masteredCardsCount: number;
+  studyTimeHours: number;
+  avgMastery: number;
+};
+
+export type TProfileStats = {
+  stats: TStats;
+};

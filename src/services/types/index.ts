@@ -7,4 +7,5 @@ export * from "./profile.types";
 export * from "./query-filters.types";
 export * from "./reset-password.types";
 export * from "./stats.types";
+export * from "./update-password.types";
 export * from "./user.types";

@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { AppPaths } from "@/constants";
+import { APP_NAME, AppPaths } from "@/constants";
 import { Atom, BookOpen, Home, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,7 +22,7 @@ const navigationItems = [
     href: AppPaths.deck.DECKS,
     icon: BookOpen,
   },
-    {
+  {
     name: "Explore",
     href: AppPaths.explore.EXPLORE,
     icon: Atom,
@@ -32,7 +32,6 @@ const navigationItems = [
     href: AppPaths.profile.PROFILE,
     icon: User,
   },
-
 ];
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -44,13 +43,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            {/* <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center"> */}
-            {/* <span className="text-white font-bold text-sm">C</span>
-             */}
-            <Image alt="logo" width={30} height={30} src={"/app_logo.png"} />
-            {/* </div> */}
+            <Image
+              alt="logo"
+              width={30}
+              height={30}
+              src={"/app_logo.png"}
+              unoptimized
+            />
             <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-              Cotton
+              {APP_NAME}
             </h1>
           </div>
           <div className="flex items-center space-x-2">
@@ -60,7 +61,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto hide-scrollbar">{children}</main>
+      <main className="flex-1 overflow-auto hide-scrollbar">
+        <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(0,0,0,0))] pointer-events-none" />
+        {children}
+      </main>
 
       {/* Bottom Navigation */}
       <nav className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-2">

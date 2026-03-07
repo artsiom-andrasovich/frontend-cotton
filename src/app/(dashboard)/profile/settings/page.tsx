@@ -1,14 +1,12 @@
 "use client";
 
 import { Navbar } from "@/components/shared";
-import { AppPaths } from "@/constants";
+import { APP_NAME, APP_VERSION, AppPaths } from "@/constants";
 import {
-  Bell,
   ChevronRight,
   HelpCircle,
   LucideIcon,
   Shield,
-  Smartphone,
   User,
 } from "lucide-react";
 import Link from "next/link";
@@ -57,34 +55,36 @@ export default function SettingsPage() {
             description="Update your photo and personal details"
             href={AppPaths.settings.PROFILE}
           />
-          <SettingsItem
+          {/* <SettingsItem
             icon={Smartphone}
             title="App"
             description="Customize appearance and study preferences"
             href={AppPaths.settings.APP}
-          />
+          /> */}
           <SettingsItem
             icon={Shield}
             title="Security"
             description="Manage your account security and privacy"
             href={AppPaths.settings.SECURITY}
           />
-          <SettingsItem
+          {/* <SettingsItem
             icon={Bell}
             title="Notifications"
             description="Control your notification preferences"
             href={AppPaths.settings.NOTIFICATIONS}
-          />
+          /> */}
           <SettingsItem
             icon={HelpCircle}
             title="About"
-            description="Information about Cotton and support"
+            description="Information about late-owl and support"
             href={AppPaths.settings.ABOUT}
           />
         </div>
 
         <div className="text-center text-sm text-gray-500 dark:text-gray-400 pt-4">
-          <p>Cotton v1.0.0</p>
+          <p>
+            {APP_NAME} v{APP_VERSION}
+          </p>
         </div>
       </div>
     </>

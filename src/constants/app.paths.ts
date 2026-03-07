@@ -30,6 +30,9 @@ export const AppPaths = {
     NOTIFICATIONS: "/profile/settings/notifications",
     ABOUT: "/profile/settings/about",
   },
+  security: {
+    CHANGE_PASSWORD: "/profile/settings/security/change-password",
+  },
   explore: {
     EXPLORE: "/explore",
   },

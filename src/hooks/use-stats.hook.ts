@@ -13,3 +13,16 @@ export function useStats() {
     isStatsLoading,
   };
 }
+
+export function useProfileStats() {
+  const { data: profileStats, isLoading: isProfileStatsLoading } = useQuery({
+    queryKey: ["profile-stats"],
+    queryFn: () => statsService.getProfileStats(),
+    staleTime: 60 * 1000 * 2.5, // 2.5 minutes
+  });
+
+  return {
+    profileStats,
+    isProfileStatsLoading,
+  };
+}

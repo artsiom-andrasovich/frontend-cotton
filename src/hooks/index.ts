@@ -8,6 +8,7 @@ export * from "./decks/use-update-deck.hook";
 export * from "./fsrs/use-get-game-cars.hook";
 export * from "./use-cards-query-filters.hook";
 export * from "./use-filters.hook";
+export * from "./use-logout.hook";
 export * from "./use-oauth.hook";
 export * from "./use-profile.hook";
 export * from "./use-query-filters.hook";

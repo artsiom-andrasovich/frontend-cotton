@@ -12,7 +12,6 @@ export function QuickActions() {
 
       <div className="grid grid-cols-2 gap-3">
         <Link href={AppPaths.deck.DECK}>
-          {/* TODO: Add logic to open create deck modal or navigate */}
           <Button className="w-full h-16 flex flex-col items-center justify-center space-y-1 bg-primary hover:bg-primary/90">
             <Plus className="w-5 h-5" />
             <span className="text-sm">Create Deck</span>

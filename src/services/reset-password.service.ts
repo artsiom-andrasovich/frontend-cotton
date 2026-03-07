@@ -1,7 +1,8 @@
-import { axiosClassic } from "@/api/interceptors";
+import { axiosClassic, axiosWithAuth } from "@/api/interceptors";
 import { ApiPaths } from "@/constants";
 import type {
   TResetPasswordByCode,
+  TUpdatePassword,
   TVerifyCodeDto,
   TVerifyCodeResponse,
 } from "./types";
@@ -25,5 +26,7 @@ export const resetPasswordService = {
       dto,
     );
   },
-  async resetPassword() {},
+  async resetPassword(dto: TUpdatePassword) {
+    await axiosWithAuth.patch(ApiPaths.reset_password.RESET_PASSWORD, dto);
+  },
 };
