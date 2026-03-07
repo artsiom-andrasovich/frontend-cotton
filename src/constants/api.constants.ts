@@ -1,5 +1,6 @@
 //TODO:
-export const API_URL = "http://34.116.209.118";
+export const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 export const ApiPaths = {
   auth: {
