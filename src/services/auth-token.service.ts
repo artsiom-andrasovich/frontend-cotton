@@ -11,9 +11,11 @@ export const getAccessToken = () => {
 };
 
 export const saveTokenStorage = (accessToken: string) => {
+  //TODO: .env prod dev like on backend
+  const isProduction = process.env.NODE_ENV === "production";
   Cookies.set(EnumTokens.ACCESS_TOKEN, accessToken, {
-    domain: "localhost",
     sameSite: "strict",
+    secure: isProduction,
     expires: 1,
   });
 };
