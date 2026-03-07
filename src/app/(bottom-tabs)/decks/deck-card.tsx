@@ -1,11 +1,9 @@
 import { CategoryIcon } from "@/components/shared";
-import { Button } from "@/components/ui/button";
 import { AppPaths, colorMapDeckCard as colorMap } from "@/constants";
 import type { TDeck } from "@/services/types";
-import { Play } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ComponentProps } from "react";
-
 const fallback = colorMap.blue;
 
 type DeckCardProps = {
@@ -15,46 +13,52 @@ type DeckCardProps = {
 export const DeckCard = ({ deck, ...props }: DeckCardProps) => {
   const color = deck.category.color;
   const colorClasses = colorMap[color as keyof typeof colorMap] || fallback;
-
+  const router = useRouter();
   return (
     <div
       {...props}
       className={`
         ${colorClasses.gradient}
         p-4 rounded-lg ${colorClasses.border}
-        shadow-sm hover:shadow-md transition-colors mb-4 flex flex-col
+        shadow-sm hover:shadow-md transition-colors mb-4 flex flex-col h-[150px] relative overflow-hidden
       `}
     >
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <Link href={AppPaths.deck.GET_DECK(deck.id)} className="block">
-            <div className="flex items-center space-x-3 mb-2">
+      {/* Category Pill - Absolute Top Right */}
+      <span
+        className={`absolute top-4 right-4 px-2 py-1 text-[10px] sm:text-xs rounded-full font-semibold shadow whitespace-nowrap z-10 ${colorClasses.badge}`}
+      >
+        {deck.category.name}
+      </span>
+
+      <div className="flex flex-col h-full w-full">
+        <div className="flex-1 min-w-0">
+          <Link
+            href={AppPaths.deck.GET_DECK(deck.id)}
+            className="flex flex-col h-full w-full outline-none"
+          >
+            <div className="flex items-start space-x-3 mb-2 min-w-0">
               <div
-                className={`w-10 h-10 ${colorClasses.iconBg} rounded-lg flex items-center justify-center shadow-sm`}
+                className={`w-10 h-10 shrink-0 ${colorClasses.iconBg} rounded-lg flex items-center justify-center shadow-sm`}
               >
                 <CategoryIcon
                   type={deck.category.icon}
                   className={`w-5 h-5 ${colorClasses.icon}`}
                 />
               </div>
-              <div className="flex-1">
-                <div className="flex items-center space-x-2">
-                  <h3 className="font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors">
+              <div className="flex-1 min-w-0 pr-16 relative">
+                <div className="flex items-center space-x-2 w-full">
+                  <h3 className="font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors truncate">
                     {deck.name}
                   </h3>
-                  <span
-                    className={`px-2 py-1 text-xs rounded-full font-semibold shadow ${colorClasses.badge}`}
-                  >
-                    {deck.category.name}
-                  </span>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2 break-words">
                   {deck.description}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center justify-between mt-3">
+            <div className="flex items-center justify-between mt-auto">
               <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                 <span>{deck.cardCount} cards</span>
                 <span>•</span>
@@ -76,13 +80,14 @@ export const DeckCard = ({ deck, ...props }: DeckCardProps) => {
                     Mastery
                   </p>
                 </div>
-                <Button
+                {/* <Button
                   size="sm"
                   variant="outline"
-                  className={`ml-4 ${colorClasses.buttonBorder}`}
+                  className={`ml-4 ${colorClasses.buttonBorder} z-50`}
+                  onClick={() => router.push(AppPaths.game.GAME(deck.id))}
                 >
                   <Play className={`w-4 h-4 ${colorClasses.play}`} />
-                </Button>
+                </Button> */}
               </div>
             </div>
 

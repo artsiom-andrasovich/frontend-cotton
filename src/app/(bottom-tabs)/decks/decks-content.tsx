@@ -15,6 +15,7 @@ export function DecksContent() {
     return (
       <>
         <DeckHeader />
+        <DecksFilter />
         <DecksList showEmptyState={false} />
       </>
     );
@@ -34,4 +35,3 @@ export function DecksContent() {
     </>
   );
 }
-

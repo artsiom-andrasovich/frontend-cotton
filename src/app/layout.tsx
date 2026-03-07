@@ -12,18 +12,28 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-export const metadata: Metadata = {
-  title: "late-owl",
-  description: "late-owl - Your Flashcard Learning App",
-  manifest: "/manifest.json",
-};
-
 export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  themeColor: "#000000",
+};
+export const metadata: Metadata = {
+  title: "lateowl",
+  description: "lateowl - Your Flashcard Learning App",
+
+  appleWebApp: {
+    capable: true,
+    title: "lateowl",
+    statusBarStyle: "black-translucent",
+    startupImage: "/apple-touch-icon.png",
+  },
+  icons: {
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

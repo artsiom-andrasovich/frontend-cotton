@@ -45,7 +45,7 @@ export function StatsSection() {
     },
     {
       label: "Cards Mastered",
-      value: stats.masteredCardsCount.toString(),
+      value: stats.masteredCardsCount?.toString() || "0",
       icon: Sigma,
       color: "text-purple-600 dark:text-purple-400",
       bgColor: "bg-purple-100 dark:bg-purple-900",

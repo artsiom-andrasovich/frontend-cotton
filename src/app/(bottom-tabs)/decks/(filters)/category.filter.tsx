@@ -26,7 +26,7 @@ export function CategoryFilter({
     }, 100);
   });
   selectedCategories = new Set(
-    categories?.filter((val) => Array.from(selectedCategories).includes(val))
+    categories?.filter((val) => Array.from(selectedCategories).includes(val)),
   );
   if (!categories || categories.length == 0) selectedCategories = new Set();
 

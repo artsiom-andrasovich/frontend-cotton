@@ -1,4 +1,5 @@
-export const API_URL = "http://localhost:3001";
+//TODO:
+export const API_URL = "http://34.116.209.118";
 
 export const ApiPaths = {
   auth: {

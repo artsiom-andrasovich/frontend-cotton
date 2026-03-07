@@ -76,7 +76,7 @@ export default function SettingsPage() {
           <SettingsItem
             icon={HelpCircle}
             title="About"
-            description="Information about late-owl and support"
+            description="Information about lateowl and support"
             href={AppPaths.settings.ABOUT}
           />
         </div>

@@ -14,8 +14,14 @@ type DecksListProps = {
 };
 
 export function DecksList({ showEmptyState = true }: DecksListProps) {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useGetDecks();
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isFetching,
+  } = useGetDecks();
 
   const decks = data?.pages.flatMap((page) => page.items) ?? [];
 
@@ -55,8 +61,12 @@ export function DecksList({ showEmptyState = true }: DecksListProps) {
     );
   }
 
+  const isRefetching = isFetching && !isFetchingNextPage && !isLoading;
+
   return (
-    <div className="grid gap-4">
+    <div
+      className={`grid gap-4 transition-all duration-300 ${isRefetching ? "opacity-60 pointer-events-none grayscale-[0.5]" : ""}`}
+    >
       {decks.map((deck, idx) => (
         <DeckCard
           deck={deck}
@@ -154,5 +164,3 @@ export function EmptyDecksState() {
     </div>
   );
 }
-
-

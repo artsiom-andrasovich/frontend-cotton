@@ -2,6 +2,7 @@ import { DEFAULT_DECK_PAGE_LIMIT } from "@/constants";
 import { deckService } from "@/services/deck.service";
 import type { TDeckCursor, TListDecks } from "@/services/types";
 import {
+  keepPreviousData,
   useInfiniteQuery,
   type QueryFunctionContext,
 } from "@tanstack/react-query";
@@ -22,9 +23,10 @@ export function useGetDecks(limit: number = DEFAULT_DECK_PAGE_LIMIT) {
         .getDecks(limit, pageParam as TDeckCursor | null, filters)
         .then((res) => res);
     },
-    initialPageParam: null, // нет курсора для первой загрузки
+    initialPageParam: null,
     getNextPageParam: (lastPage) => {
       return lastPage.hasNextPage ? lastPage.nextCursor : undefined;
     },
+    placeholderData: keepPreviousData,
   });
 }
