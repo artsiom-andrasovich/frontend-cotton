@@ -16,7 +16,7 @@ export const cardService = {
 
   async getCardById(
     deckId: string,
-    cardId: string
+    cardId: string,
   ): Promise<AxiosResponse<Partial<TCard>>> {
     const res = await axiosWithAuth.get(ApiPaths.cards.GET_CARD_BY_ID, {
       params: {
@@ -31,7 +31,7 @@ export const cardService = {
     deckId: string,
     limit: number,
     cursor?: TCardCursor | null,
-    filters?: string
+    filters?: string,
   ) {
     const params: Record<string, any> = { limit };
     if (cursor) {
@@ -60,9 +60,16 @@ export const cardService = {
 
           return query.toString();
         },
-      }
+      },
     );
 
     return res.data;
+  },
+
+  async deleteCards(dto: { deckId: string; deleteCardsId: string[] }) {
+    const res = await axiosWithAuth.delete(ApiPaths.cards.DELETE_CARDS, {
+      data: dto,
+    });
+    return res;
   },
 };

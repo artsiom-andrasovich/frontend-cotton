@@ -36,6 +36,7 @@ export const ApiPaths = {
     LIST_CARDS: "/card/list-cards",
     UPDATE_CARD: "/card/update-card",
     GET_CARD_BY_ID: "/card/get-card-by-id",
+    DELETE_CARDS: "/card/delete-cards",
   },
   fsrs: {
     GAME_PARAMS: (deckId: string) => `/fsrs/game-params/${deckId}`,

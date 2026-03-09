@@ -6,13 +6,24 @@ import { useInView } from "react-intersection-observer";
 
 type CardListProps = {
   deckId: string;
+  isSelecting?: boolean;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (id: string) => void;
+  onLongPress?: (id: string) => void;
+  onDelete?: (id: string) => void;
 };
 
-export function CardsList({ deckId }: CardListProps) {
+export function CardsList({
+  deckId,
+  isSelecting = false,
+  selectedIds = new Set(),
+  onToggleSelect,
+  onLongPress,
+  onDelete,
+}: CardListProps) {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading } =
     useGetListCards(deckId, 5);
   const cards = data?.pages.flatMap((page) => page.items) ?? [];
-  console.log(cards);
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.5,
@@ -61,6 +72,11 @@ export function CardsList({ deckId }: CardListProps) {
             card={card}
             deckId={deckId}
             key={card.id}
+            isSelecting={isSelecting}
+            isSelected={selectedIds.has(card.id)}
+            onToggleSelect={onToggleSelect}
+            onLongPress={onLongPress}
+            onDelete={onDelete}
           />
         ))
       )}

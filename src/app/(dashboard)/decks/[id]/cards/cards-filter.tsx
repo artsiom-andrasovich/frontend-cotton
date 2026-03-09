@@ -1,22 +1,25 @@
+"use client";
+
 import { AnimatedSearchInput } from "@/components/shared";
 import { Button } from "@/components/ui";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { POSSIBLE_SORT_BY_CARD } from "@/constants";
 import { useCardsQueryFilters } from "@/hooks";
 import { useCardsFilters } from "@/hooks/use-cards-filters.hook";
-import { ChevronDown, SortAsc } from "lucide-react";
-import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { Check, ChevronDown, SortAsc } from "lucide-react";
+import { useEffect } from "react";
 
 export function CardsFilter({
   onSearchFocusChange,
 }: {
   onSearchFocusChange?: (isFocused: boolean) => void;
 }) {
-  const [popoverOpen, setPopoverOpen] = useState(false);
   const { setSortBy, sortBy, search, setSearch } = useCardsFilters();
   useCardsQueryFilters({ sortBy, search });
 
@@ -36,32 +39,44 @@ export function CardsFilter({
           setSearch={setSearch}
           onFocusChange={onSearchFocusChange}
         />
-        <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="flex  items-center gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="flex items-center gap-2">
               <SortAsc className="w-4 h-4" />
               <ChevronDown className="w-4 h-4" />
             </Button>
-          </PopoverTrigger>
-          <PopoverContent align="end" className="w-40 p-2">
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="
+              w-auto min-w-[10rem]
+              bg-white dark:bg-gray-800 
+              border-gray-200 dark:border-gray-700
+              [&>*:not(:last-child)]:border-b 
+              [&>*:not(:last-child)]:border-gray-100 
+              dark:[&>*:not(:last-child)]:border-gray-700
+            "
+          >
             {POSSIBLE_SORT_BY_CARD.map((option) => (
-              <button
+              <DropdownMenuItem
                 key={option.value}
-                className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                onClick={() => setSortBy(option.value)}
+                className={cn(
+                  "cursor-pointer flex items-center justify-between gap-3",
+                  "focus:bg-gray-100 dark:focus:bg-gray-700",
                   sortBy === option.value
-                    ? "bg-primary/10 dark:bg-primary/20 text-primary"
-                    : ""
-                }`}
-                onClick={() => {
-                  setSortBy(option.value);
-                  setPopoverOpen(false);
-                }}
+                    ? "text-primary dark:text-primary"
+                    : "text-gray-700 dark:text-gray-200",
+                )}
               >
-                {option.label}
-              </button>
+                <span>{option.label}</span>
+                {sortBy === option.value && (
+                  <Check className="w-4 h-4 text-primary" />
+                )}
+              </DropdownMenuItem>
             ))}
-          </PopoverContent>
-        </Popover>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
