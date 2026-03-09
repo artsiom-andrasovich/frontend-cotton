@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { AppPaths } from "@/constants";
 import { useProfile } from "@/hooks/use-profile.hook";
+import { saveTokenStorage } from "@/services/auth-token.service";
 import { userService } from "@/services/user.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -44,9 +45,14 @@ export function ProfileForm() {
   const { mutate: updateUserData, isPending: isUpdatingUserData } = useMutation(
     {
       mutationFn: userService.changeUserData,
-      onSuccess: () => {
+      onSuccess: (response) => {
+        const { accessToken } = response.data;
+        if (accessToken) {
+          saveTokenStorage(accessToken);
+        }
         queryClient.invalidateQueries({ queryKey: ["profile"] });
-        // toast.success("User data updated"); // handled in onSubmit
+        toast.success("User data updated");
+        router.push(AppPaths.profile.PROFILE);
       },
       onError: (error: any) => {
         const message =
@@ -65,28 +71,25 @@ export function ProfileForm() {
   );
 
   const onSubmit = async (data: ProfileFormValues) => {
-    try {
-      // 1. Update Profile (First/Last Name)
-      if (
-        data.firstName !== profile?.firstName ||
-        data.lastName !== profile?.lastName
-      ) {
-        updateProfile({
-          firstName: data.firstName,
-          lastName: data.lastName,
-        });
-      }
+    // 1. Update Profile (First/Last Name)
+    if (
+      data.firstName !== profile?.firstName ||
+      data.lastName !== profile?.lastName
+    ) {
+      updateProfile({
+        firstName: data.firstName,
+        lastName: data.lastName,
+      });
+    }
 
-      // 2. Update User Data (Username/Email)
-      // Check if username/email changed.
-      if (
-        data.username !== profile?.username ||
-        data.email !== profile?.email
-      ) {
-        updateUserData({ username: data.username, email: data.email });
-      }
+    // 2. Update User Data (Username/Email)
+    if (data.username !== profile?.username || data.email !== profile?.email) {
+      updateUserData({ username: data.username, email: data.email });
+      // Navigation happens in onSuccess — stays on page if error
+    } else {
+      // Only profile fields changed, navigate immediately
       router.push(AppPaths.profile.PROFILE);
-    } catch (e) {}
+    }
   };
 
   return (

@@ -13,11 +13,11 @@ export const userService = {
   async changeUserData(data: {
     username?: string;
     email?: string;
-  }): Promise<AxiosResponse<TUserProfile>> {
-    const res = await axiosWithAuth.patch<TUserProfile>(
-      ApiPaths.user.CHANGE_USER_DATA,
-      data,
-    );
+  }): Promise<AxiosResponse<{ user: TUserProfile; accessToken: string }>> {
+    const res = await axiosWithAuth.patch<{
+      user: TUserProfile;
+      accessToken: string;
+    }>(ApiPaths.user.CHANGE_USER_DATA, data);
     return res;
   },
 };
