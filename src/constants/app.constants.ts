@@ -27,3 +27,6 @@ export const POSSIBLE_SORT_BY_CARD = [
 
 export const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION || "1.0.0";
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "lateowl";
+
+export const SUPPORT_EMAIL = "support@lateowl.dev";
+export const GITHUB_URL = "https://github.com";

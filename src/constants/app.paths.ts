@@ -29,6 +29,7 @@ export const AppPaths = {
     SECURITY: "/profile/settings/security",
     NOTIFICATIONS: "/profile/settings/notifications",
     ABOUT: "/profile/settings/about",
+    HELP: "/profile/settings/help",
   },
   security: {
     CHANGE_PASSWORD: "/profile/settings/security/change-password",
