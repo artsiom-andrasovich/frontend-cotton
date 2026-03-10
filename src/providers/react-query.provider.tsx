@@ -11,7 +11,7 @@ export function ReactQueryProvider({ children }: PropsWithChildren) {
           refetchOnWindowFocus: false,
         },
       },
-    })
+    }),
   );
 
   return (
