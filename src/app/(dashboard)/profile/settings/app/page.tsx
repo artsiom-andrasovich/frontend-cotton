@@ -57,7 +57,7 @@ export default function AppSettingsPage() {
                   Number of cards to study at once
                 </p>
               </div>
-              <select className="border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+              <select className="border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 text-base md:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                 <option>10</option>
                 <option>20</option>
                 <option>30</option>

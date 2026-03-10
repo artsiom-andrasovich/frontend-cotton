@@ -50,7 +50,7 @@ export const CodeBlockController: React.FC<CodeBlockControllerProps> = ({
             </div>
           ) : (
             <select
-              className=" bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 "
+              className=" bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md px-2 py-1 text-base md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 "
               contentEditable={false}
               defaultValue={defaultLanguage ?? "null"}
               onChange={(event) =>

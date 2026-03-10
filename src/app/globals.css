@@ -119,6 +119,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground;
@@ -156,7 +157,12 @@ html.dark {
   padding: 1rem 1.5rem;
   margin: 1.5em 0;
   border-left: 5px solid #4f46e5; /* Indigo-600 — красивый синий/фиолетовый акцент */
-  background-color: rgba(79, 70, 229, 0.1); /* Светлый фон с оттенком того же цвета */
+  background-color: rgba(
+    79,
+    70,
+    229,
+    0.1
+  ); /* Светлый фон с оттенком того же цвета */
   color: #3730a3; /* Indigo-800 — чуть темнее для текста */
   font-style: italic;
   border-radius: 0.375rem; /* Скругленные углы */
@@ -178,7 +184,7 @@ html.dark {
   background: var(--black);
   border-radius: 0.5rem;
   color: var(--white);
-  font-family: 'JetBrainsMono', monospace;
+  font-family: "JetBrainsMono", monospace;
   margin: 1.5rem 0;
   padding: 0.75rem 1rem;
 }
@@ -257,8 +263,8 @@ html.dark {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* For mobile browsers and PWA */
@@ -281,12 +287,12 @@ html.dark {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   /* Ensure proper status bar spacing on Safari */
   .min-h-dvh {
     min-height: -webkit-fill-available;
   }
-  
+
   /* Safari status bar color support */
   html {
     -webkit-user-select: none;

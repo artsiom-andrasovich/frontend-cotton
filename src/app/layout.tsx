@@ -65,9 +65,9 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center overscroll-y-none`}
       >
-        <div className="max-w-md shadow-2xl w-full min-h-[100dvh]">
+        <div className="md:max-w-md mx-auto shadow-2xl w-full min-h-[100dvh]">
           {/*TODO: Desktop responsive support */}
           <RootProvider>{children}</RootProvider>
         </div>

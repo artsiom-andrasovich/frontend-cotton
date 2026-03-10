@@ -55,7 +55,7 @@ export function CategorySelector({
             <div className="flex items-center gap-3">
               <select
                 disabled={disabled}
-                className="w-full px-3 py-2 border rounded bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-3 py-2 border rounded bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary text-base md:text-sm"
                 value={isCreatingCategory ? "__create__" : field.value}
                 onChange={(e) => {
                   if (e.target.value === "__create__") {
@@ -66,7 +66,7 @@ export function CategorySelector({
                     field.onChange(e);
                     // Set color and icon to match selected category
                     const cat = allCategories.find(
-                      (c) => c.name === e.target.value
+                      (c) => c.name === e.target.value,
                     );
                     if (cat) {
                       setValue("color", cat.color);
