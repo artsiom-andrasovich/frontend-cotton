@@ -59,9 +59,12 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center`}
       >
-        <RootProvider>{children}</RootProvider>
+        <div className="max-w-md shadow-2xl w-full">
+          {/*TODO: Desktop responsive support */}
+          <RootProvider>{children}</RootProvider>
+        </div>
       </body>
     </html>
   );
