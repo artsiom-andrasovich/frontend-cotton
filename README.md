@@ -45,20 +45,20 @@ LateOwl is a high-performance, responsive client application for a spaced repeti
 2. **Install dependencies:**
    This project uses Yarn.
 
-```bash
-yarn install
-```
+   ```bash
+   yarn install
+   ```
 
 3. **Environment Configuration:**
    Create a .env.local file in the root directory and point it to your backend API:
 
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:3000
-```
+   ```bash
+   NEXT_PUBLIC_API_URL=http://localhost:3000
+   ```
 
 4. **Run the development server:**
    The project is configured to use Turbopack on port `5555`.
 
-```bash
-yarn dev
-```
+   ```bash
+   yarn dev
+   ```
