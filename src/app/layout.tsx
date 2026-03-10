@@ -14,8 +14,13 @@ const geistMono = Geist_Mono({
 });
 export const viewport: Viewport = {
   themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
   viewportFit: "cover",
 };
+
 export const metadata: Metadata = {
   title: "lateowl",
   description: "lateowl - Your Flashcard Learning App",
@@ -60,9 +65,9 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center min-h-[100dvh]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center`}
       >
-        <div className="w-full md:max-w-md md:mx-auto shadow-2xl min-h-[100dvh] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] md:pl-0 md:pr-0">
+        <div className="max-w-md shadow-2xl w-full min-h-[100dvh]">
           {/*TODO: Desktop responsive support */}
           <RootProvider>{children}</RootProvider>
         </div>

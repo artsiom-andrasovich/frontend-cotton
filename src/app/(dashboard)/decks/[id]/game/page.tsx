@@ -39,7 +39,7 @@ export default function GamePage({
 
   if (isLoading) {
     return (
-      <div className="h-dvh flex flex-col items-center justify-center p-4">
+      <div className="h-[100dvh] flex flex-col items-center justify-center p-4">
         <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-4" />
         <p className="text-gray-600 dark:text-gray-400">Loading session...</p>
       </div>
@@ -50,7 +50,7 @@ export default function GamePage({
 
   if (!game) {
     return (
-      <div className="h-dvh flex flex-col items-center justify-center p-4 text-center">
+      <div className="h-[100dvh] flex flex-col items-center justify-center p-4 text-center">
         <ServerCrash className="w-12 h-12 text-red-500 mb-4" />
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
           Failed to load game
@@ -66,7 +66,7 @@ export default function GamePage({
 
   if (endSession) {
     return (
-      <div className="h-dvh flex flex-col">
+      <div className="h-[100dvh] flex flex-col">
         <Stats deckId={deckId} onRateAgain={handleRateAgain} />
       </div>
     );
@@ -74,7 +74,7 @@ export default function GamePage({
 
   if (isInvalidIndex) {
     return (
-      <div className="h-dvh flex flex-col items-center justify-center p-4 text-center">
+      <div className="h-[100dvh] flex flex-col items-center justify-center p-4 text-center">
         <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-4" />
         <p className="text-gray-600 dark:text-gray-400">
           Syncing session data. Restarting...
@@ -85,7 +85,7 @@ export default function GamePage({
 
   if (!currentCard) {
     return (
-      <div className="h-dvh flex flex-col items-center justify-center p-4 text-center">
+      <div className="h-[100dvh] flex flex-col items-center justify-center p-4 text-center">
         <AlertCircle className="w-12 h-12 text-orange-500 mb-4" />
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
           Card Not Found
@@ -98,7 +98,7 @@ export default function GamePage({
   }
 
   return (
-    <div className="h-dvh flex flex-col">
+    <div className="h-[100dvh] flex flex-col">
       <Navbar title="Study Session"></Navbar>
 
       <FlashCardsSection card={currentCard} showAnswer={showAnswer} />

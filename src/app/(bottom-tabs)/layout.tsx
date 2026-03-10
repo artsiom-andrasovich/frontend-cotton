@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 pt-2 pb-[max(env(safe-area-inset-bottom),0.5rem)]">
+      <nav className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 pt-2 pb-[env(safe-area-inset-bottom)]">
         <div className="flex items-center justify-around">
           {navigationItems.map((item) => {
             const Icon = item.icon;

@@ -32,7 +32,7 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
 
   // 🔹 Получаем колоду, если это update
   const { data: deckData, isLoading: isLoadingDeck } = useGetDeckById(
-    deckId || ""
+    deckId || "",
   );
 
   const form = useForm<TUpdateDeck>({
@@ -137,7 +137,7 @@ export default function UpdateDeckForm({ deckId }: TUpdateDeckProps) {
   return (
     <>
       <Navbar path={path} title={FormName} />
-      <div className="max-w-lg mx-auto p-6">
+      <div className="max-w-lg mx-auto p-6 pb-[calc(env(safe-area-inset-bottom)+2rem)]">
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <DeckFields form={form} />
