@@ -38,7 +38,7 @@ export function BottomTabsLayout({ children }: DashboardLayoutProps) {
   return (
     <>
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 pb-3 pt-[max(env(safe-area-inset-top),0.75rem)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -61,7 +61,7 @@ export function BottomTabsLayout({ children }: DashboardLayoutProps) {
       <main className="flex-1 overflow-auto hide-scrollbar">{children}</main>
 
       {/* Bottom Navigation */}
-      <nav className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-2">
+      <nav className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 pt-2 pb-[max(env(safe-area-inset-bottom),0.5rem)]">
         <div className="flex items-center justify-around">
           {navigationItems.map((item) => {
             const Icon = item.icon;

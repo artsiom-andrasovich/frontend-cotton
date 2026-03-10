@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 });
 export const viewport: Viewport = {
   themeColor: "#000000",
+  viewportFit: "cover",
 };
 export const metadata: Metadata = {
   title: "lateowl",
@@ -59,9 +60,9 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center min-h-[100dvh]`}
       >
-        <div className="max-w-md shadow-2xl w-full">
+        <div className="w-full md:max-w-md md:mx-auto shadow-2xl min-h-[100dvh] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] md:pl-0 md:pr-0">
           {/*TODO: Desktop responsive support */}
           <RootProvider>{children}</RootProvider>
         </div>
