@@ -55,7 +55,7 @@ export function CategorySelector({
             <div className="flex items-center gap-3">
               <select
                 disabled={disabled}
-                className="w-full px-3 py-2 border rounded bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary text-base md:text-sm"
+                className="flex h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] dark:bg-input/30 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                 value={isCreatingCategory ? "__create__" : field.value}
                 onChange={(e) => {
                   if (e.target.value === "__create__") {

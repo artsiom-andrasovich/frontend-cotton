@@ -42,7 +42,7 @@ export function DeckFields({ form }: DeckFieldsProps) {
             <FormControl>
               <div className="relative">
                 <textarea
-                  className="w-full px-3 py-2 border rounded bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary min-h-[120px] resize-none text-base md:text-sm"
+                  className="flex min-h-[120px] w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] dark:bg-input/30 resize-none md:text-sm"
                   placeholder="Enter deck description"
                   {...field}
                   maxLength={150}
